@@ -19,6 +19,8 @@ class Flippedword() : Parcelable {
 
     val ctime: Long? = null
 
+    var distance:Long? = null
+
     val contents: List<Content>? = null
 
     val status: Int? = null
@@ -26,10 +28,11 @@ class Flippedword() : Parcelable {
     val lng: Double? = null
 
     constructor(parcel: Parcel) : this() {
+        distance = parcel.readValue(Long::class.java.classLoader) as? Long
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-
+        parcel.writeValue(distance)
     }
 
     override fun describeContents(): Int {
@@ -45,6 +48,5 @@ class Flippedword() : Parcelable {
             return arrayOfNulls(size)
         }
     }
-
 
 }

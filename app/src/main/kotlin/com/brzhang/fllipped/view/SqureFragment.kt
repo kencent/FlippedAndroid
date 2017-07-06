@@ -8,13 +8,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.FllippedService
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.RetrofitClient
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
-import com.brzhang.fllipped.utils.MockUtils
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -97,7 +98,24 @@ class SqureFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.fllippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
+            holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
+            holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
+            holder.flippedDistance.text = fllippeds?.get(position)?.distance?.toString()
+            if (FlippedHelper.hasPic(fllippeds?.get(position))){
+                holder.tagPic.visibility = View.VISIBLE
+            }else{
+                holder.tagPic.visibility = View.GONE
+            }
+            if (FlippedHelper.hasVoice(fllippeds?.get(position))){
+                holder.tagVoice.visibility = View.VISIBLE
+            }else{
+                holder.tagVoice.visibility = View.GONE
+            }
+            if (FlippedHelper.hasVideo(fllippeds?.get(position))){
+                holder.tagVoice.visibility = View.VISIBLE
+            }else{
+                holder.tagVideo.visibility  = View.GONE
+            }
         }
 
         override fun getItemCount(): Int {
@@ -107,7 +125,14 @@ class SqureFragment : Fragment() {
 
     private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-         val fllippedText: TextView = itemView.findViewById(R.id.fragment_squre_item_tv_text) as TextView
+         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
+         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView
+         val flippedDistance: TextView = itemView.findViewById(R.id.flipped_item_tv_send_distance) as TextView
+         val tagPic: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_pic) as ImageView
+         val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
+         val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView
 
     }
 }
+
+
