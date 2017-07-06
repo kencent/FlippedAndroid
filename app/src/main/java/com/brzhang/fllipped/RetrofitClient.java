@@ -26,8 +26,8 @@ public class RetrofitClient {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("Authorization", "fuck you")
-                        .header("x-uid:", "18681446372")
+                        .header("Authorization", getAuthorization())
+                        .header("x-uid:", getUid())
                         .method(original.method(), original.body())
                         .build();
 
@@ -42,5 +42,13 @@ public class RetrofitClient {
                 .build();
         return retrofit;
 
+    }
+
+    private static String getAuthorization(){
+        return "fuck you";
+    }
+
+    private static String getUid(){
+        return "18681446372";
     }
 }
