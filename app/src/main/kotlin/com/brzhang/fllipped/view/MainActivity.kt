@@ -1,13 +1,12 @@
 package com.brzhang.fllipped.view
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import com.brzhang.fllipped.R
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     val TAG = "MainActivity"
 
@@ -40,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     /*检查登录态是否过期*/
     private fun loginCheck() {
-
 
     }
 

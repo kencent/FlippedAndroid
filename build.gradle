@@ -9,10 +9,10 @@ buildscript {
     ext.okhttpVersion = "3.6.0"
 
     repositories {
-        //jcenter()
-        maven {
-            url "http://maven.oa.com/nexus/content/groups/androidbuild"
-        }
+        jcenter()
+//        maven {
+//            url "http://maven.oa.com/nexus/content/groups/androidbuild"
+//        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -25,10 +25,10 @@ buildscript {
 
 allprojects {
     repositories {
-        //jcenter()
-        maven {
-            url "http://maven.oa.com/nexus/content/groups/androidbuild"
-        }
+        jcenter()
+//        maven {
+//            url "http://maven.oa.com/nexus/content/groups/androidbuild"
+//        }
     }
 }
 
