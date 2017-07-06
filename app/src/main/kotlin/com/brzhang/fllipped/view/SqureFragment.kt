@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.FllippedService
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.RetrofitClient
@@ -134,44 +135,4 @@ class SqureFragment : Fragment() {
     }
 }
 
-object FlippedHelper {
-    fun  hasPic(flippedword: Flippedword?): Boolean {
-        if (flippedword == null){
-            return false
-        }
 
-        flippedword.contents?.forEach { it ->
-            if (it.type.equals("picture")){
-                return true
-            }
-        }
-        return false
-    }
-
-    fun hasVoice(flippedword: Flippedword?): Boolean {
-        if (flippedword == null){
-            return false
-        }
-
-        flippedword.contents?.forEach { it ->
-            if (it.type.equals("audio")){
-                return true
-            }
-        }
-        return false
-    }
-
-    fun hasVideo(flippedword: Flippedword?): Boolean {
-        if (flippedword == null){
-            return false
-        }
-
-        flippedword.contents?.forEach { it ->
-            if (it.type.equals("video")){
-                return true
-            }
-        }
-        return false
-    }
-
-}

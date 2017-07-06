@@ -2,6 +2,7 @@ package com.brzhang.fllipped.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import com.brzhang.fllipped.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,9 +19,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         loginCheck()
         setupView()
+        initToolBar()
+    }
+
+    private fun initToolBar() {
+
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        toolbar.setNavigationOnClickListener({
+            finish()
+        })
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
+        showNavigationBack()
 
     }
 
+    fun showNavigationBack() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
     /*检查登录态是否过期*/
     private fun loginCheck() {
