@@ -10,17 +10,16 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by junshao on 16/7/1.
+ * Created by hoolly on 16/7/1.
  */
 public class Env {
-    private static Resources                      sRes;
-
+    private static Resources sRes;
 
     public static void initEnv(Context context) {
         sRes = context.getResources();
     }
 
-    public static String getHttpUrl(){
+    public static String getHttpUrl() {
 
         return sRes.getString(R.string.http_url);
     }
