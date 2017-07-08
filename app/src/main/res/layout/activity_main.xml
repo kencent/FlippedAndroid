@@ -10,17 +10,17 @@
         android:layout_height="?attr/actionBarSize">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/activity_main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="文字居中"
+            android:text="@string/activity_main_default_title"
             android:textColor="@color/color_white"
             android:textSize="20sp"/>
 
         <ImageView
-            android:id="@+id/right_button"
+            android:id="@+id/activity_main_right_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -43,7 +43,8 @@
         android:id="@+id/myScrollingContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/color_white">
 
         <!-- Your loooooong scrolling content here. -->
         <FrameLayout
@@ -62,5 +63,16 @@
         android:layout_gravity="bottom"
         app:bb_behavior="shy"
         app:bb_tabXmlResource="@xml/bottombar"/>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progress_bar"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:indicatorColor="@color/colorPrimaryDark"
+        app:indicatorName="BallClipRotatePulseIndicator"
+    />
 
 </android.support.design.widget.CoordinatorLayout>

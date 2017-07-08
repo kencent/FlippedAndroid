@@ -3,8 +3,11 @@ package com.brzhang.fllipped.view
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.brzhang.fllipped.BuildConfig
 import com.brzhang.fllipped.RxBus
 import com.brzhang.fllipped.busevent.UserAuthFailed
+import com.brzhang.fllipped.pref.UserPref
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -28,19 +31,35 @@ abstract class BaseActivity : AppCompatActivity() {
         mSubScription.clear()
     }
 
+    fun toast(string: String) {
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
+    }
+
+    fun dToast(string: String) {
+        if (BuildConfig.DEBUG) {
+            toast(string)
+        }
+    }
+
     private fun setupBusEvent() {
 
         RxBus.getRxBusSingleton().subscribe(mSubScription, {
             event: Any? ->
             when (event) {
                 is UserAuthFailed -> {
-                    startLoginActivity()
+                    UserPref.setUserLogin(this, false)
+                    gotoLoginActivity()
+                }
+                else -> {//交给子类处理其他事件
+                    handleRxEvent(event)
                 }
             }
         })
     }
 
-    private fun startLoginActivity() {
+    abstract fun handleRxEvent(event: Any?)
+
+    protected fun gotoLoginActivity() {
         if (this is LoginActivity) {
             return
         }

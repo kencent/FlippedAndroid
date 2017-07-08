@@ -1,20 +1,14 @@
 package com.brzhang.fllipped.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import com.brzhang.fllipped.BuildConfig
 import com.brzhang.fllipped.R
-import com.brzhang.fllipped.RxBus
 import com.brzhang.fllipped.api.FllippedService
 import com.brzhang.fllipped.api.RetrofitClient
-import com.brzhang.fllipped.busevent.UserAuthFailed
-import rx.subscriptions.CompositeSubscription
 
 /**
  *
@@ -87,26 +81,16 @@ abstract class FlippedBaseActivity : BaseActivity() {
 
     protected fun setSubContent() {
         val container = findViewById(R.id.activity_base_container) as FrameLayout
-        val containerView = layoutInflater.inflate(setLayoutRes(), container, false)
+        val containerView = layoutInflater.inflate(getLayoutRes(), container, false)
         container.addView(containerView)
         setupView(containerView)
-    }
-
-    fun toast(string: String) {
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
-    }
-
-    fun dToast(string: String) {
-        if (BuildConfig.DEBUG) {
-            toast(string)
-        }
     }
 
     fun fllippedNetService(): FllippedService {
         return RetrofitClient.newInstance().create(FllippedService::class.java)
     }
 
-    abstract fun setLayoutRes(): Int
+    abstract fun getLayoutRes(): Int
 
     abstract fun setupView(view: View)
 

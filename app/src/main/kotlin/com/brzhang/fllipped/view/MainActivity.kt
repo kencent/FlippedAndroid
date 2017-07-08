@@ -2,10 +2,13 @@ package com.brzhang.fllipped.view
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.widget.Toast
 import com.brzhang.fllipped.R
+import com.brzhang.fllipped.pref.UserPref
 import kotlinx.android.synthetic.main.activity_main.*
 
+/*因为底部有tab栏，因此没有继承至FlippedBaseActivity ，而是直接继承至BaseActivity*/
 class MainActivity : BaseActivity() {
 
     val TAG = "MainActivity"
@@ -21,6 +24,13 @@ class MainActivity : BaseActivity() {
         initToolBar()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!UserPref.isUserLogin(this)) {
+            gotoLoginActivity()
+        }
+    }
+
     private fun initToolBar() {
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -29,8 +39,7 @@ class MainActivity : BaseActivity() {
         })
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
-        showNavigationBack()
-
+        //showNavigationBack()
     }
 
     fun showNavigationBack() {
@@ -46,7 +55,16 @@ class MainActivity : BaseActivity() {
 
         setupBottomBarFragments()
         registeBottomBarCallBacks()
+    }
 
+    fun showProgressBar(){
+        progress_bar.visibility = View.VISIBLE
+        progress_bar.show()
+    }
+
+    fun hideProgressBar(){
+        progress_bar.visibility = View.GONE
+        progress_bar.hide()
     }
 
     private fun registeBottomBarCallBacks() {
@@ -66,10 +84,10 @@ class MainActivity : BaseActivity() {
             tabId: Int ->
             when (tabId) {
                 R.id.tab_nearby -> {
-                    Toast.makeText(this, "tab_nearby click double", Toast.LENGTH_SHORT).show()
+                    dToast("tab_nearby click double")
                 }
                 R.id.tab_friends -> {
-                    Toast.makeText(this, "tab_friends click double", Toast.LENGTH_SHORT).show()
+                    dToast("tab_friends click double")
                 }
             }
         }
@@ -80,6 +98,7 @@ class MainActivity : BaseActivity() {
         transAction.hide(mSqureFragment)
         transAction.show(mMineFragment)
         transAction.commitAllowingStateLoss()
+        activity_main_title.text = "我的"
 
     }
 
@@ -88,6 +107,7 @@ class MainActivity : BaseActivity() {
         transAction.show(mSqureFragment)
         transAction.hide(mMineFragment)
         transAction.commitAllowingStateLoss()
+        activity_main_title.text = "广场"
     }
 
     private fun setupBottomBarFragments() {
@@ -98,5 +118,9 @@ class MainActivity : BaseActivity() {
         transAction.commitAllowingStateLoss()
     }
 
-
+    /***
+     * 这里可以处理总线事件
+     */
+    override fun handleRxEvent(event: Any?) {
+    }
 }

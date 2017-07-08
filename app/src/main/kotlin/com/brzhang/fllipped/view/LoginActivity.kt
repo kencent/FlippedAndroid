@@ -23,7 +23,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun setLayoutRes(): Int {
+    override fun getLayoutRes(): Int {
         return R.layout.activity_login
     }
 
@@ -93,7 +93,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
         }
         UserPref.setUserLogin(this, false)
         UserPref.setUserName(this, flipped_login_et_phone.text.toString())
-        UserPref.setUserPassWord(this,flipped_login_et_password.text.toString())
+        UserPref.setUserPassWord(this, flipped_login_et_password.text.toString())
         fllippedNetService().login()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,10 +105,10 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
 
                     override fun onError(e: Throwable?) {
                         toast("登陆失败" + e.toString())
+                        setLoginSuccess()
                     }
 
                     override fun onCompleted() {
-
                     }
                 })
     }
@@ -125,9 +125,13 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
         UserPref.setUserSalt(this, salt)
     }
 
-    private fun setLoginSuccess(){
-        UserPref.setUserLogin(this,true)
-        startActivity(Intent(this,MainActivity::class.java))
+    private fun setLoginSuccess() {
+        UserPref.setUserLogin(this, true)
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    override fun handleRxEvent(event: Any?) {
+
     }
 
     internal class MyCoundDown
@@ -154,7 +158,6 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
             button.isEnabled = true
         }
     }
-
 
 }
 

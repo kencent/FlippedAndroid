@@ -34,3 +34,6 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+
+-keep class com.wang.avi.** { *; }
+-keep class com.wang.avi.indicators.** { *; }

@@ -2,6 +2,7 @@ package com.brzhang.fllipped.api
 
 import android.util.Base64
 import com.brzhang.fllipped.App
+import com.brzhang.fllipped.Env
 import com.brzhang.fllipped.RxBus
 import com.brzhang.fllipped.busevent.UserAuthFailed
 import com.brzhang.fllipped.pref.UserPref
@@ -9,8 +10,6 @@ import com.brzhang.fllipped.utils.EncodeUtils
 import com.brzhang.fllipped.utils.LogUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
-import okhttp3.internal.http.HttpHeaders
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -31,8 +30,6 @@ object RetrofitClient {
             var username = username
             var salt = salt
 
-            val uri = chain.request().url().query()
-
             if (username.isEmpty()) {
                 username = UserPref.getUserName(App.ApplicationContext(), "")
             }
@@ -51,14 +48,14 @@ object RetrofitClient {
                     .method(original.method(), original.body())
                     .build()
             var response = chain.proceed(request)
-            if (response.code() == 401 && !uri.contains("login",false)){
+            if (response.code() == 401) {
                 RxBus.getRxBusSingleton().send(UserAuthFailed())
             }
             response
         }
         val retrofit = Retrofit.Builder()
                 .client(httpClient.build())
-                .baseUrl("https://flippedwords.com/")
+                .baseUrl(Env.getHttpUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
@@ -68,9 +65,9 @@ object RetrofitClient {
 
     private fun getAuthorization(chain: Interceptor.Chain, username: String, salt: String, password: String): String {
         val ts = System.currentTimeMillis()
-        val rd = Random().nextInt()
+        val rd = Random().nextInt(100000)
         val method = chain.request().method()
-        val uri = chain.request().url().query()
+        val uri = chain.request().url()
         val body = chain.request().body()?.toString() ?: ""
 
         LogUtil.dLoge("hoolly", "request body is [$body]")

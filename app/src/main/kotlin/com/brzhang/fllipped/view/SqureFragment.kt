@@ -1,6 +1,7 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
+import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -13,6 +14,7 @@ import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.wang.avi.AVLoadingIndicatorView
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -24,6 +26,7 @@ import java.util.ArrayList
  */
 
 class SqureFragment : BaseFragment() {
+
 
     private var mAdapter:SqureFllippedAdapter? = null
 
@@ -46,17 +49,19 @@ class SqureFragment : BaseFragment() {
     }
 
     private fun initData() {
+                showLoadingView()
                 fllippedNetService()
                 .getNearByFlippeds(HashMap<String,String>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
                     override fun onCompleted() {
-
+                        hideLoadingView()
                     }
 
                     override fun onError(e: Throwable) {
                         Log.e("hoolly","error",e)
+                        hideLoadingView()
                     }
 
                     override fun onNext(fllippesResonse: FlippedsResponse) {
@@ -65,6 +70,19 @@ class SqureFragment : BaseFragment() {
                     }
                 })
     }
+
+    private fun hideLoadingView() {
+        if (activity is MainActivity){
+            (activity as MainActivity).hideProgressBar()
+        }
+    }
+
+    private fun showLoadingView() {
+        if (activity is MainActivity){
+            (activity as MainActivity).showProgressBar()
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
