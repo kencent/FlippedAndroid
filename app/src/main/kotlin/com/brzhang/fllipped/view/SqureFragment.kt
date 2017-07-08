@@ -1,7 +1,6 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -11,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.brzhang.fllipped.FlippedHelper
-import com.brzhang.fllipped.FllippedService
 import com.brzhang.fllipped.R
-import com.brzhang.fllipped.RetrofitClient
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import rx.Subscriber
@@ -26,7 +23,7 @@ import java.util.ArrayList
  * Description :
  */
 
-class SqureFragment : Fragment() {
+class SqureFragment : BaseFragment() {
 
     private var mAdapter:SqureFllippedAdapter? = null
 
@@ -49,8 +46,7 @@ class SqureFragment : Fragment() {
     }
 
     private fun initData() {
-        RetrofitClient.newInstance()
-                .create(FllippedService::class.java)
+                fllippedNetService()
                 .getNearByFlippeds(HashMap<String,String>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

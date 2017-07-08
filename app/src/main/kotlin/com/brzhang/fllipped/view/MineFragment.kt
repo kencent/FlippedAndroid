@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment
  * Description :
  */
 
-class MineFragment : Fragment() {
+class MineFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

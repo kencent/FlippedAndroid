@@ -1,5 +1,6 @@
 package com.brzhang.fllipped.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -9,18 +10,29 @@ import android.widget.TextView
 import android.widget.Toast
 import com.brzhang.fllipped.BuildConfig
 import com.brzhang.fllipped.R
+import com.brzhang.fllipped.RxBus
+import com.brzhang.fllipped.api.FllippedService
+import com.brzhang.fllipped.api.RetrofitClient
+import com.brzhang.fllipped.busevent.UserAuthFailed
+import rx.subscriptions.CompositeSubscription
 
 /**
  *
  * Created by brzhang on 2017/7/6.
  * Description :
  */
-abstract class FlippedBaseActivity:BaseActivity(){
+abstract class FlippedBaseActivity : BaseActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flipped_base)
         initToolBar()
         setSubContent()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun initToolBar() {
@@ -35,7 +47,7 @@ abstract class FlippedBaseActivity:BaseActivity(){
 
     }
 
-     fun setActTitle(titleStr: CharSequence){
+    fun setActTitle(titleStr: CharSequence) {
         val title = findViewById(R.id.title) as TextView
         title.text = titleStr
     }
@@ -44,11 +56,11 @@ abstract class FlippedBaseActivity:BaseActivity(){
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    fun hideNavigationBack(){
+    fun hideNavigationBack() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
-    fun showRightButton(res:Int = R.drawable.flipped_ic_add, listener: View.OnClickListener){
+    fun showRightButton(res: Int = R.drawable.flipped_ic_add, listener: View.OnClickListener) {
         val rightButton = findViewById(R.id.right_button) as ImageView
         val rightText = findViewById(R.id.right_text) as TextView
         rightButton.visibility = View.VISIBLE
@@ -57,7 +69,7 @@ abstract class FlippedBaseActivity:BaseActivity(){
         rightButton.setOnClickListener(listener)
     }
 
-    fun showRigthText(string: String = "完成",listener: View.OnClickListener){
+    fun showRigthText(string: String = "完成", listener: View.OnClickListener) {
         val rightButton = findViewById(R.id.right_button) as ImageView
         val rightText = findViewById(R.id.right_text) as TextView
         rightButton.visibility = View.GONE
@@ -66,31 +78,35 @@ abstract class FlippedBaseActivity:BaseActivity(){
         rightText.setOnClickListener(listener)
     }
 
-    fun hideRight(){
+    fun hideRight() {
         val rightButton = findViewById(R.id.right_button) as ImageView
         val rightText = findViewById(R.id.right_text) as TextView
         rightButton.visibility = View.GONE
         rightText.visibility = View.GONE
     }
 
-    protected fun setSubContent(){
+    protected fun setSubContent() {
         val container = findViewById(R.id.activity_base_container) as FrameLayout
-        val containerView = layoutInflater.inflate(setLayoutRes(),container,false)
+        val containerView = layoutInflater.inflate(setLayoutRes(), container, false)
         container.addView(containerView)
         setupView(containerView)
     }
 
-    fun toast(string: String){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show()
+    fun toast(string: String) {
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show()
     }
 
-    fun dToast(string: String){
-        if (BuildConfig.DEBUG){
+    fun dToast(string: String) {
+        if (BuildConfig.DEBUG) {
             toast(string)
         }
     }
 
-    abstract fun setLayoutRes():Int
+    fun fllippedNetService(): FllippedService {
+        return RetrofitClient.newInstance().create(FllippedService::class.java)
+    }
+
+    abstract fun setLayoutRes(): Int
 
     abstract fun setupView(view: View)
 
