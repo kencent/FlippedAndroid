@@ -9,45 +9,44 @@ import android.os.Parcelable
  * Description :
  */
 
-class Content : Parcelable {
-    val link: String
+class Content() : Parcelable {
+    enum class Type(val type:String){
+        TEXT("text"),
+        PICUTRE("picture"),
+        VIDEO("video"),
+        AUDIO("audio")
 
-    val type: String
+    }
+    var link: String? = null
 
-    val text: String
+    var type: String? = null
 
-    constructor(link: String, type: String, text: String) {
-        this.link = link
-        this.type = type
-        this.text = text
+    var text: String? = null
+
+    constructor(parcel: Parcel) : this() {
+        link = parcel.readString()
+        type = parcel.readString()
+        text = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(link)
+        parcel.writeString(type)
+        parcel.writeString(text)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(this.link)
-        dest.writeString(this.type)
-        dest.writeString(this.text)
-    }
+    companion object CREATOR : Parcelable.Creator<Content> {
+        override fun createFromParcel(parcel: Parcel): Content {
+            return Content(parcel)
+        }
 
-    protected constructor(`in`: Parcel) {
-        this.link = `in`.readString()
-        this.type = `in`.readString()
-        this.text = `in`.readString()
-    }
-
-    companion object {
-
-        val CREATOR: Parcelable.Creator<Content> = object : Parcelable.Creator<Content> {
-            override fun createFromParcel(source: Parcel): Content {
-                return Content(source)
-            }
-
-            override fun newArray(size: Int): Array<Content?> {
-                return arrayOfNulls(size)
-            }
+        override fun newArray(size: Int): Array<Content?> {
+            return arrayOfNulls(size)
         }
     }
+
 }

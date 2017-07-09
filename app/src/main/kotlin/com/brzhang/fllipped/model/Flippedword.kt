@@ -9,23 +9,23 @@ import android.os.Parcelable
  */
 
 class Flippedword() : Parcelable {
-    val sendto: String? = null
+    var sendto: String? = null
 
-    val lat: Double? = null
+    var lat: Double? = null
 
-    val links: List<Link>? = null
+    var links: List<Link>? = null
 
-    val id: Int? = null
+    var id: Int? = null
 
-    val ctime: Long? = null
+    var ctime: Long? = null
 
     var distance:Long? = null
 
-    val contents: List<Content>? = null
+    var contents: List<Content>? = null
 
-    val status: Int? = null
+    var status: Int? = null
 
-    val lng: Double? = null
+    var lng: Double? = null
 
     constructor(parcel: Parcel) : this() {
         distance = parcel.readValue(Long::class.java.classLoader) as? Long

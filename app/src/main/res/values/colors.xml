@@ -8,4 +8,5 @@
     <color name="text_color_h2">#8f8f8f</color>
     <color name="color_divider">#f5f5f5</color>
     <color name="color_white">#ffffff</color>
+    <color name="color_page_background">#f5f5f5</color>
 </resources>

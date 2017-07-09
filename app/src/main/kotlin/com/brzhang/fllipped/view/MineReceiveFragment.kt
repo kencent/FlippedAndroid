@@ -1,31 +1,51 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.brzhang.fllipped.R
+import com.brzhang.fllipped.model.FlippedsResponse
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
  *
  * Created by brzhang on 2017/7/9.
  * Description :
  */
-class MineReceiveFragment : BaseFragment() {
+class MineReceiveFragment : SqureFragment() {
 
+    var mflippedId = ""
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_mine_receive, container, false)
-        setupView(view)
-        initData()
-        return view
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun initData() {
+    override fun askFlippedList() {
+        fllippedNetService()
+                .getReceivesFlippedwords(mflippedId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<FlippedsResponse>() {
+                    override fun onCompleted() {
+                        hideLoadingView()
+                    }
 
+                    override fun onError(e: Throwable) {
+                        Log.e("hoolly", "error", e)
+                        hideLoadingView()
+                    }
+
+                    override fun onNext(flippesResonse: FlippedsResponse) {
+                        showFlippedList(flippesResonse)
+                        extractMaxFlippedId(flippesResonse)
+                    }
+                })
     }
 
-    private fun setupView(view: View?) {
-
+    private fun extractMaxFlippedId(fllippesResonse: FlippedsResponse) {
+        mflippedId = fllippesResonse.flippedwords?.last()?.id.toString()
     }
 
     companion object {

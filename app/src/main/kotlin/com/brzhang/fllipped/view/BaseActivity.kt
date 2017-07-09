@@ -8,6 +8,7 @@ import com.brzhang.fllipped.BuildConfig
 import com.brzhang.fllipped.RxBus
 import com.brzhang.fllipped.busevent.UserAuthFailed
 import com.brzhang.fllipped.pref.UserPref
+import com.tbruyelle.rxpermissions.RxPermissions
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -17,9 +18,12 @@ import rx.subscriptions.CompositeSubscription
  */
 abstract class BaseActivity : AppCompatActivity() {
     val mSubScription = CompositeSubscription()
+    var rxPermissions: RxPermissions? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupBusEvent()
+        rxPermissions = RxPermissions(this)
     }
 
     override fun onResume() {

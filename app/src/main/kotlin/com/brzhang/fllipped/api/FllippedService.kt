@@ -1,5 +1,6 @@
 package com.brzhang.fllipped.api
 
+import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.model.VeryCodeResponse
@@ -30,7 +31,17 @@ interface FllippedService {
     @GET("nearby_flippedwords")
     fun getNearByFlippeds(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>
 
+    @GET("mypub_flippedwords")
+    fun getMypubFlippedwords(): Observable<FlippedsResponse>
+
+    @GET("my_flippedwords?id=103")
+    fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
+
+    @GET("youtusig")
+    fun getSign(): Observable<SignResponse>
+
+
     @GET("help")
-    fun getHelp():Observable<ResponseBody>
+    fun getHelp(): Observable<ResponseBody>
 
 }

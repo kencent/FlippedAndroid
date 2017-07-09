@@ -1,7 +1,6 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
-import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -14,9 +13,6 @@ import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
-import com.brzhang.fllipped.utils.LogUtil
-import com.wang.avi.AVLoadingIndicatorView
-import okhttp3.ResponseBody
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -27,7 +23,7 @@ import java.util.ArrayList
  * Description :
  */
 
-class SqureFragment : BaseFragment() {
+open class SqureFragment : BaseFragment() {
 
 
     private var mAdapter: SqureFllippedAdapter? = null
@@ -43,15 +39,19 @@ class SqureFragment : BaseFragment() {
         return view
     }
 
-    private fun setupView(view: View?) {
+    protected fun setupView(view: View?) {
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mAdapter = SqureFllippedAdapter()
         recyclerView.adapter = mAdapter
     }
 
-    private fun initData() {
+    protected fun initData() {
         showLoadingView()
+        askFlippedList()
+    }
+
+    open fun askFlippedList() {
         fllippedNetService()
                 .getNearByFlippeds(HashMap<String, String>())
                 .subscribeOn(Schedulers.io())
@@ -66,20 +66,25 @@ class SqureFragment : BaseFragment() {
                         hideLoadingView()
                     }
 
-                    override fun onNext(fllippesResonse: FlippedsResponse) {
-                        mAdapter?.fllippeds = fllippesResonse.flippedwords
-                        mAdapter?.notifyDataSetChanged()
+                    override fun onNext(flippesResonse: FlippedsResponse) {
+                        showFlippedList(flippesResonse)
                     }
                 })
     }
 
-    private fun hideLoadingView() {
+    fun showFlippedList(fllippesResonse: FlippedsResponse) {
+        mAdapter?.fllippeds = fllippesResonse.flippedwords
+        mAdapter?.notifyDataSetChanged()
+    }
+
+
+    protected fun hideLoadingView() {
         if (activity is MainActivity) {
             (activity as MainActivity).hideProgressBar()
         }
     }
 
-    private fun showLoadingView() {
+    protected fun showLoadingView() {
         if (activity is MainActivity) {
             (activity as MainActivity).showProgressBar()
         }
