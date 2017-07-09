@@ -32,6 +32,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
         hideNavigationBack()
         setActTitle("登录")
 
+        flipped_login_tv_about.setOnClickListener(this)
         flipped_login_bt_get_very_code.setOnClickListener(this)
         flipped_login_bt_login.setOnClickListener(this)
     }
@@ -44,7 +45,14 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
             R.id.flipped_login_bt_get_very_code -> {
                 doGetVeryCode()
             }
+            R.id.flipped_login_tv_about ->{
+                startAboutActivity()
+            }
         }
+    }
+
+    private fun startAboutActivity() {
+        AboutActivity.startMe(this)
     }
 
     private fun doGetVeryCode() {

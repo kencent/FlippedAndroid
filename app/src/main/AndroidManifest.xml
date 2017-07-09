@@ -39,7 +39,7 @@
         </activity>
         <activity android:name=".view.DetailActivity">
         </activity>
-        <activity android:name=".view.AboudActivity">
+        <activity android:name=".view.AboutActivity">
         </activity>
 
     </application>

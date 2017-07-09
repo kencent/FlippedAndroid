@@ -1,5 +1,7 @@
 package com.brzhang.fllipped.view
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.Content
@@ -15,7 +17,7 @@ import rx.schedulers.Schedulers
  * Description :
  */
 
-class AboudActivity : FlippedBaseActivity() {
+class AboutActivity : FlippedBaseActivity() {
     override fun handleRxEvent(event: Any?) {
     }
 
@@ -52,4 +54,10 @@ class AboudActivity : FlippedBaseActivity() {
         }
     }
 
+    companion object {
+        fun startMe(context: Context){
+            var intent = Intent(context,AboutActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 }
