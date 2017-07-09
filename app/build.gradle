@@ -13,6 +13,21 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file('flipped.jks')
+            keyAlias 'kok'
+            keyPassword 'zhang522511622'
+            storePassword 'zhang522511622'
+            v2SigningEnabled false
+        }
+        debug {
+            storeFile file('flipped.jks')
+            keyAlias 'kok'
+            keyPassword 'zhang522511622'
+            storePassword 'zhang522511622'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false

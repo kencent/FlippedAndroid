@@ -53,13 +53,13 @@ class AboutActivity : FlippedBaseActivity() {
 
     private fun showHelp(contents: List<Content>?) {
         contents?.forEach { content ->
-            activity_about_text.text = "${activity_about_text.text} \"\n\" ${content.text}"
+            activity_about_text.text = "${activity_about_text.text}\n${content.text}"
         }
     }
 
     companion object {
-        fun startMe(context: Context){
-            var intent = Intent(context,AboutActivity::class.java)
+        fun startMe(context: Context) {
+            var intent = Intent(context, AboutActivity::class.java)
             context.startActivity(intent)
         }
     }
