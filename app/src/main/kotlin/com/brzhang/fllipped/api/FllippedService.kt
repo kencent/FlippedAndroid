@@ -23,7 +23,7 @@ interface FllippedService {
     fun login(): Observable<ResponseBody>
 
     @POST("flippedwords")
-    fun createFllipped(fllipped: Flippedword): Observable<Flippedword>
+    fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
     @GET("nearby_flippedwords")
     fun getNearByFlippeds(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>

@@ -37,6 +37,10 @@ object RetrofitClient {
                 salt = UserPref.getUserSalt(App.ApplicationContext(), "")
             }
 
+            if (username.isEmpty()){
+                username = "10000"
+            }
+
             var password = UserPref.getUserPassWord(App.ApplicationContext(), "")
 
             LogUtil.dLoge("hoolly", "username is [$username]")

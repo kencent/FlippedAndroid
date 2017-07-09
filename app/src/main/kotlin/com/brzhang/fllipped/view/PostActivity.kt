@@ -164,10 +164,10 @@ class PostActivity : FlippedBaseActivity() {
                         var flippedWord = Flippedword()
                         flippedWord.sendto = mPhone?.text.toString()
                         val contentText = Content()
-                        contentText.type = Content.Type.TEXT.name
+                        contentText.type = Content.Type.TEXT.type
                         contentText.text = mText.toString()
                         val contentImage = Content()
-                        contentImage.type = Content.Type.PICUTRE.name
+                        contentImage.type = Content.Type.PICUTRE.type
                         contentImage.text = t
                         flippedWord.contents = mutableListOf(contentText, contentImage)
                         fllippedNetService().createFllipped(flippedWord)

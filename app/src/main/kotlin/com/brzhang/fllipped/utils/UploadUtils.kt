@@ -9,6 +9,7 @@ import com.brzhang.fllipped.App
 import com.brzhang.fllipped.BizService
 import com.brzhang.fllipped.pref.UserPref
 import com.tencent.cos.model.PutObjectRequest
+import com.tencent.cos.utils.FileUtils
 import rx.Observable
 
 /**
@@ -28,7 +29,7 @@ object UploadUtils {
         /** 设置Bucket */
         putObjectRequest.bucket = bizService.bucket
         /** 设置cosPath :远程路径*/
-        putObjectRequest.cosPath = UserPref.getUserName(App.ApplicationContext(), "nobody") + "/" + imagePath
+        putObjectRequest.cosPath =   "/" +UserPref.getUserName(App.ApplicationContext(), "10000")+ FileUtils.getFileName(imagePath)
         /** 设置srcPath: 本地文件的路径 */
         putObjectRequest.srcPath = imagePath
         /** 设置 insertOnly: 是否上传覆盖同名文件*/
