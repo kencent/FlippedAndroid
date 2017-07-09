@@ -59,6 +59,9 @@ class DetailActivity : FlippedBaseActivity() {
         mImage = flipped_detail_image
         mVideo = flipped_detail_video
 
+        showNavigationBack()
+        hideRight()
+        setActTitle("详情")
         initData()
     }
 

@@ -26,6 +26,9 @@ class AboutActivity : FlippedBaseActivity() {
     }
 
     override fun setupView(view: View) {
+        showNavigationBack()
+        setActTitle("用户须知")
+        hideRight()
         initData()
     }
 
