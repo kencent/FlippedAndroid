@@ -1,5 +1,7 @@
 package com.brzhang.fllipped.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -13,7 +15,6 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_flipped_detail.*
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
-import rx.lang.kotlin.subscriber
 import rx.schedulers.Schedulers
 
 /**
@@ -22,8 +23,6 @@ import rx.schedulers.Schedulers
  * Description :
  */
 class DetailActivity : FlippedBaseActivity() {
-
-    public val FlippedId = "FlippedId"
 
     private var mFlippedId = ""
 
@@ -112,6 +111,15 @@ class DetailActivity : FlippedBaseActivity() {
         } else {
             mVideo?.visibility = View.VISIBLE
             TODO("play video")
+        }
+    }
+
+    companion object {
+        val FlippedId: String = "FlippedId"
+        fun startMe(context: Context, flippedId: String) {
+            val intent: Intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(FlippedId, flippedId)
+            context.startActivity(intent)
         }
     }
 

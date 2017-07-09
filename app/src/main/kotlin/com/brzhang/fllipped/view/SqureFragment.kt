@@ -137,11 +137,19 @@ open class SqureFragment : BaseFragment() {
             } else {
                 holder.tagVideo.visibility = View.GONE
             }
+            holder.itemView.setOnClickListener({
+                view ->
+                startDetailActivity(view.tag.toString())
+            })
         }
 
         override fun getItemCount(): Int {
             return if (fllippeds == null) 0 else fllippeds!!.size
         }
+    }
+
+    private fun startDetailActivity(flippedId: String) {
+        DetailActivity.startMe(context,flippedId)
     }
 
     private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
