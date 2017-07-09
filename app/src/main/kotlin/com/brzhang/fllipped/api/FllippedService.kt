@@ -42,6 +42,6 @@ interface FllippedService {
 
 
     @GET("help")
-    fun getHelp(): Observable<ResponseBody>
+    fun getHelp(): Observable<Flippedword>
 
 }
