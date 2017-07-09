@@ -30,4 +30,7 @@ interface FllippedService {
     @GET("nearby_flippedwords")
     fun getNearByFlippeds(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>
 
+    @GET("help")
+    fun getHelp():Observable<ResponseBody>
+
 }

@@ -14,7 +14,9 @@ import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.utils.LogUtil
 import com.wang.avi.AVLoadingIndicatorView
+import okhttp3.ResponseBody
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -28,7 +30,7 @@ import java.util.ArrayList
 class SqureFragment : BaseFragment() {
 
 
-    private var mAdapter:SqureFllippedAdapter? = null
+    private var mAdapter: SqureFllippedAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +45,15 @@ class SqureFragment : BaseFragment() {
 
     private fun setupView(view: View?) {
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mAdapter = SqureFllippedAdapter()
         recyclerView.adapter = mAdapter
     }
 
     private fun initData() {
-                showLoadingView()
-                fllippedNetService()
-                .getNearByFlippeds(HashMap<String,String>())
+        showLoadingView()
+        fllippedNetService()
+                .getNearByFlippeds(HashMap<String, String>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
@@ -60,7 +62,7 @@ class SqureFragment : BaseFragment() {
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.e("hoolly","error",e)
+                        Log.e("hoolly", "error", e)
                         hideLoadingView()
                     }
 
@@ -72,13 +74,13 @@ class SqureFragment : BaseFragment() {
     }
 
     private fun hideLoadingView() {
-        if (activity is MainActivity){
+        if (activity is MainActivity) {
             (activity as MainActivity).hideProgressBar()
         }
     }
 
     private fun showLoadingView() {
-        if (activity is MainActivity){
+        if (activity is MainActivity) {
             (activity as MainActivity).showProgressBar()
         }
     }
@@ -115,20 +117,20 @@ class SqureFragment : BaseFragment() {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
             holder.flippedDistance.text = fllippeds?.get(position)?.distance?.toString()
-            if (FlippedHelper.hasPic(fllippeds?.get(position))){
+            if (FlippedHelper.hasPic(fllippeds?.get(position))) {
                 holder.tagPic.visibility = View.VISIBLE
-            }else{
+            } else {
                 holder.tagPic.visibility = View.GONE
             }
-            if (FlippedHelper.hasVoice(fllippeds?.get(position))){
+            if (FlippedHelper.hasVoice(fllippeds?.get(position))) {
                 holder.tagVoice.visibility = View.VISIBLE
-            }else{
+            } else {
                 holder.tagVoice.visibility = View.GONE
             }
-            if (FlippedHelper.hasVideo(fllippeds?.get(position))){
+            if (FlippedHelper.hasVideo(fllippeds?.get(position))) {
                 holder.tagVoice.visibility = View.VISIBLE
-            }else{
-                holder.tagVideo.visibility  = View.GONE
+            } else {
+                holder.tagVideo.visibility = View.GONE
             }
         }
 
@@ -139,12 +141,12 @@ class SqureFragment : BaseFragment() {
 
     private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
-         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView
-         val flippedDistance: TextView = itemView.findViewById(R.id.flipped_item_tv_send_distance) as TextView
-         val tagPic: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_pic) as ImageView
-         val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
-         val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView
+        val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
+        val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView
+        val flippedDistance: TextView = itemView.findViewById(R.id.flipped_item_tv_send_distance) as TextView
+        val tagPic: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_pic) as ImageView
+        val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
+        val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView
 
     }
 }
