@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,5 +48,18 @@
         <!-- Your loooooong scrolling content here. -->
 
     </android.support.v4.widget.NestedScrollView>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progress_bar"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:indicatorColor="@color/colorPrimaryDark"
+        app:indicatorName="BallClipRotatePulseIndicator"
+    />
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -8,43 +8,58 @@ import com.brzhang.fllipped.model.Flippedword
  * Description :
  */
 object FlippedHelper {
-    fun  hasPic(flippedword: Flippedword?): Boolean {
+
+    fun getText(flippedword: Flippedword?): String {
         if (flippedword == null){
-            return false
+            return ""
+        }
+
+        flippedword.contents?.forEach { it ->
+            if (it.type.equals("text")){
+                return it.text ?: ""
+            }
+        }
+        return ""
+    }
+
+
+    fun getPic(flippedword: Flippedword?): String {
+        if (flippedword == null){
+            return ""
         }
 
         flippedword.contents?.forEach { it ->
             if (it.type.equals("picture")){
-                return true
+                return it.text ?: ""
             }
         }
-        return false
+        return ""
     }
 
-    fun hasVoice(flippedword: Flippedword?): Boolean {
+    fun getVoice(flippedword: Flippedword?): String {
         if (flippedword == null){
-            return false
+            return ""
         }
 
         flippedword.contents?.forEach { it ->
             if (it.type.equals("audio")){
-                return true
+                return it.text ?: ""
             }
         }
-        return false
+        return ""
     }
 
-    fun hasVideo(flippedword: Flippedword?): Boolean {
+    fun getVideo(flippedword: Flippedword?): String {
         if (flippedword == null){
-            return false
+            return ""
         }
 
         flippedword.contents?.forEach { it ->
             if (it.type.equals("video")){
-                return true
+                return it.text ?: ""
             }
         }
-        return false
+        return ""
     }
 
 }

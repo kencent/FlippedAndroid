@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.api.FllippedService
 import com.brzhang.fllipped.api.RetrofitClient
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  *
@@ -88,6 +89,16 @@ abstract class FlippedBaseActivity : BaseActivity() {
 
     fun fllippedNetService(): FllippedService {
         return RetrofitClient.newInstance().create(FllippedService::class.java)
+    }
+
+    fun showProgressBar(){
+        progress_bar.visibility = View.VISIBLE
+        progress_bar.show()
+    }
+
+    fun hideProgressBar(){
+        progress_bar.visibility = View.GONE
+        progress_bar.hide()
     }
 
     abstract fun getLayoutRes(): Int

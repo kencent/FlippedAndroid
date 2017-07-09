@@ -5,10 +5,7 @@ import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.model.VeryCodeResponse
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 import rx.Observable
 
 /**
@@ -36,6 +33,9 @@ interface FllippedService {
 
     @GET("my_flippedwords?id=103")
     fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
+
+    @GET("flippedwords/{id}")
+    fun getFlippedDetail(@Path("id") flippedId:String):Observable<Flippedword>
 
     @GET("youtusig")
     fun getSign(): Observable<SignResponse>

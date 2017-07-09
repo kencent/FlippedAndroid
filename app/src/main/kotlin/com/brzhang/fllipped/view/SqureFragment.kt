@@ -122,17 +122,17 @@ open class SqureFragment : BaseFragment() {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
             holder.flippedDistance.text = fllippeds?.get(position)?.distance?.toString()
-            if (FlippedHelper.hasPic(fllippeds?.get(position))) {
+            if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE
             } else {
                 holder.tagPic.visibility = View.GONE
             }
-            if (FlippedHelper.hasVoice(fllippeds?.get(position))) {
+            if (!FlippedHelper.getVoice(fllippeds?.get(position)).isEmpty()) {
                 holder.tagVoice.visibility = View.VISIBLE
             } else {
                 holder.tagVoice.visibility = View.GONE
             }
-            if (FlippedHelper.hasVideo(fllippeds?.get(position))) {
+            if (!FlippedHelper.getVideo(fllippeds?.get(position)).isEmpty()) {
                 holder.tagVoice.visibility = View.VISIBLE
             } else {
                 holder.tagVideo.visibility = View.GONE
