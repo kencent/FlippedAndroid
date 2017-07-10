@@ -17,7 +17,7 @@ interface FllippedService {
 
 
     @GET("password")
-    fun getVeryCode(@Query("phone") phone: String): Observable<VeryCodeResponse>
+    fun getVeryCode(): Observable<VeryCodeResponse>
 
     @GET("login")
     fun login(): Observable<ResponseBody>

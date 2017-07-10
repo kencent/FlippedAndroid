@@ -30,6 +30,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
     override fun onOptionHomeClick() {
         this.finish()
     }
+
     override fun setupView(view: View) {
         hideRight()
         hideNavigationBack()
@@ -48,7 +49,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
             R.id.flipped_login_bt_get_very_code -> {
                 doGetVeryCode()
             }
-            R.id.flipped_login_tv_about ->{
+            R.id.flipped_login_tv_about -> {
                 startAboutActivity()
             }
         }
@@ -59,21 +60,20 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
     }
 
     private fun doGetVeryCode() {
-
-        val phone = flipped_login_et_phone.text.toString()
         if (!isValidPhone()) {
             toast("请输入正确手机号")
             return
         }
+        UserPref.setUserName(this, flipped_login_et_phone.text.toString())
         startGetVeryCodeBtCoundDown()
         fllippedNetService()
-                .getVeryCode(phone)
+                .getVeryCode()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<VeryCodeResponse>() {
                     override fun onNext(t: VeryCodeResponse?) {
                         toast("获取验证成功")
-                        storeSalt(t?.salt ?: "")
+                        storeSalt(t?.s ?: "")
                     }
 
                     override fun onCompleted() {
@@ -116,7 +116,6 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
 
                     override fun onError(e: Throwable?) {
                         toast("登陆失败" + e.toString())
-                        setLoginSuccess()
                     }
 
                     override fun onCompleted() {

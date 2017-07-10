@@ -31,12 +31,12 @@ object EncodeUtils {
         return ""
     }
 
-    fun hamcsha1(key: ByteArray, data: ByteArray): String? {
+    fun hamcsha1(key: ByteArray, data: ByteArray): ByteArray? {
         try {
             val signingKey = SecretKeySpec(key, "HmacSHA1")
             val mac = Mac.getInstance("HmacSHA1")
             mac.init(signingKey)
-            return byte2hex(mac.doFinal(data))
+            return mac.doFinal(data)
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
         } catch (e: InvalidKeyException) {

@@ -44,11 +44,11 @@ object RetrofitClient {
             var password = UserPref.getUserPassWord(App.ApplicationContext(), "")
 
             LogUtil.dLoge("hoolly", "username is [$username]")
-            LogUtil.dLoge("hoolly", "salt is [$salt]")
+            LogUtil.dLoge("hoolly", "s is [$salt]")
             val token = getAuthorization(chain, username, salt, password)
             val request = original.newBuilder()
                     .header("Authorization", token)
-                    .header("x-uid:", username)
+                    .header("x-uid", username)
                     .method(original.method(), original.body())
                     .build()
             var response = chain.proceed(request)
@@ -75,11 +75,11 @@ object RetrofitClient {
         val body = chain.request().body()?.toString() ?: ""
 
         LogUtil.dLoge("hoolly", "request body is [$body]")
-        // step 1 key = md5(phone + md5(password + salt))
-        val key = EncodeUtils.md5(username + EncodeUtils.md5(salt + password))
+        // step 1 key = md5(phone + md5(password + s))
+        val key = EncodeUtils.md5(username + EncodeUtils.md5(password+salt))
         // step 2 signature = base64(hmac_sha1(key, username + ts + rd + method + uri + body))
-        val data = username + ts + rd + method + uri + body
-        val signature = Base64.encodeToString(EncodeUtils.hamcsha1(key.toByteArray(), data.toByteArray())?.toByteArray(), Base64.NO_WRAP)
+        val data = username + ts + rd + method + uri.encodedPath() + body
+        val signature = Base64.encodeToString(EncodeUtils.hamcsha1(key.toByteArray(), data.toByteArray()), Base64.NO_WRAP)
         LogUtil.dLoge("hoolly", "signature is [$signature]")
         // step 3 token = base64(json_encode({"ts": ts, "rd": rd, "sign": signature}))
         var tokenJson = JSONObject()
