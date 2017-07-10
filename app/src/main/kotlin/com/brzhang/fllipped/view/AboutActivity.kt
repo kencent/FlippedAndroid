@@ -18,6 +18,10 @@ import rx.schedulers.Schedulers
  */
 
 class AboutActivity : FlippedBaseActivity() {
+    override fun onOptionHomeClick() {
+        this.finish()
+    }
+
     override fun handleRxEvent(event: Any?) {
     }
 

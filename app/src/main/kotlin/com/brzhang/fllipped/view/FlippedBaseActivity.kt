@@ -2,6 +2,7 @@ package com.brzhang.fllipped.view
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -53,6 +54,22 @@ abstract class FlippedBaseActivity : BaseActivity() {
 
     fun hideNavigationBack() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            android.R.id.home ->{
+                onOptionHomeClick()
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    open fun onOptionHomeClick(){
+
     }
 
     fun showRightButton(res: Int = R.drawable.flipped_ic_add, listener: View.OnClickListener) {

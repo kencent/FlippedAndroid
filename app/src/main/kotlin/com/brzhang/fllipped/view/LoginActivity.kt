@@ -27,6 +27,9 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
         return R.layout.activity_login
     }
 
+    override fun onOptionHomeClick() {
+        this.finish()
+    }
     override fun setupView(view: View) {
         hideRight()
         hideNavigationBack()

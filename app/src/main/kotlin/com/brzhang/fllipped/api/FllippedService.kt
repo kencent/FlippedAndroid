@@ -44,4 +44,7 @@ interface FllippedService {
     @GET("help")
     fun getHelp(): Observable<Flippedword>
 
+    @POST("feedbacks")
+    fun feedbacks(@Body flippedword: Flippedword):Observable<ResponseBody>
+
 }

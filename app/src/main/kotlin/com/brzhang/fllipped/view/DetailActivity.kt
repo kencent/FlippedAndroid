@@ -52,6 +52,9 @@ class DetailActivity : FlippedBaseActivity() {
         return R.layout.activity_flipped_detail
     }
 
+    override fun onOptionHomeClick() {
+        this.finish()
+    }
     override fun setupView(view: View) {
         msendTo = flipped_detail_tv_send_to
         mtext = flipped_detail_text

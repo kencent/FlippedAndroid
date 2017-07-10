@@ -61,6 +61,10 @@ class PostActivity : FlippedBaseActivity() {
         }
     }
 
+    override fun onOptionHomeClick() {
+        this.finish()
+    }
+
     override fun handleRxEvent(event: Any?) {
     }
 
@@ -151,6 +155,15 @@ class PostActivity : FlippedBaseActivity() {
 
     private fun postFlipped() {
 
+        if (mPhone?.text.toString().isBlank()){
+            toast("还没有填发送给谁")
+            return
+        }
+
+        if (mText?.text.toString().isBlank()){
+            toast("写点什么话吧")
+            return
+        }
 
         if (mSelected?.size > 0) {
             val path = UploadUtils.UriToPath(this, mSelected[0])
