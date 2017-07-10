@@ -13,13 +13,16 @@ import com.brzhang.fllipped.R
 import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.Content
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.brzhang.fllipped.utils.UploadUtils
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import kotlinx.android.synthetic.main.activity_post.*
+import org.json.JSONObject
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -178,11 +181,12 @@ class PostActivity : FlippedBaseActivity() {
                         flippedWord.sendto = mPhone?.text.toString()
                         val contentText = Content()
                         contentText.type = Content.Type.TEXT.type
-                        contentText.text = mText.toString()
+                        contentText.text = mText?.text.toString()
                         val contentImage = Content()
                         contentImage.type = Content.Type.PICUTRE.type
                         contentImage.text = t
                         flippedWord.contents = mutableListOf(contentText, contentImage)
+                        UserPref.setRequestbody(this,Gson().toJson(flippedWord))
                         fllippedNetService().createFllipped(flippedWord)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
@@ -191,9 +195,10 @@ class PostActivity : FlippedBaseActivity() {
             var flippedWord = Flippedword()
             flippedWord.sendto = mPhone?.text.toString()
             val contentText = Content()
-            contentText.type = Content.Type.TEXT.name
-            contentText.text = mText.toString()
+            contentText.type = Content.Type.TEXT.type
+            contentText.text = mText?.text.toString()
             flippedWord.contents = mutableListOf(contentText)
+            UserPref.setRequestbody(this,Gson().toJson(flippedWord))
             fllippedNetService().createFllipped(flippedWord)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

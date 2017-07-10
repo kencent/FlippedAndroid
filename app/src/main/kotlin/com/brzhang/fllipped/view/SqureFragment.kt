@@ -120,7 +120,7 @@ open class SqureFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
-            holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
+            holder.flippedSento.text = "发送给：${fllippeds?.get(position)?.sendto.toString()}"
             holder.flippedDistance.text = fllippeds?.get(position)?.distance?.toString()
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE

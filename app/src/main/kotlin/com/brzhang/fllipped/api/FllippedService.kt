@@ -31,7 +31,7 @@ interface FllippedService {
     @GET("mypub_flippedwords")
     fun getMypubFlippedwords(): Observable<FlippedsResponse>
 
-    @GET("my_flippedwords?id=103")
+    @GET("my_flippedwords")
     fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
 
     @GET("flippedwords/{id}")

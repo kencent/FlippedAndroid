@@ -15,6 +15,8 @@ object UserPref {
     val KEY_PASSWORD = "userpassword"
     val KEY_IS_USER_LOGIN = "islogin"
 
+    var KEY_REQUEST_BODY = "key_request_body"
+
     fun getString(ctx: Context, key: String, defaultValue: String): String {
         val sp = ctx.getSharedPreferences(PREF_NAME,
                 Context.MODE_PRIVATE)
@@ -70,6 +72,14 @@ object UserPref {
 
     fun setUserLogin(context: Context, userLogin: Boolean) {
         setBoolean(context, KEY_IS_USER_LOGIN, userLogin)
+    }
+
+    fun  setRequestbody(context: Context, toJson: String = "{}") {
+        setString(context,KEY_REQUEST_BODY,toJson)
+    }
+
+    fun getRequestbody(context: Context) :String{
+        return getString(context,KEY_REQUEST_BODY,"{}")
     }
 
 }

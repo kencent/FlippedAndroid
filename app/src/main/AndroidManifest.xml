@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <application
         android:name=".App"
@@ -26,27 +26,34 @@
         <activity
             android:name=".view.LoginActivity"
             android:label="@string/title_activity_login"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+        >
         </activity>
-        <activity android:name=".view.MainActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
-
-            <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".view.PostActivity">
+        <activity android:name=".view.MainActivity"
+                  android:screenOrientation="portrait">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN"/>-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER"/>-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".view.DetailActivity">
+        <activity android:name=".view.PostActivity"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+
+            <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
-        <activity android:name=".view.AboutActivity">
+        <activity android:name=".view.DetailActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.ReportActivity">
+        <activity android:name=".view.AboutActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".view.ReportActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
     </application>

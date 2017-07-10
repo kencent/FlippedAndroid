@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/text_color_h1"
         android:textSize="@dimen/text_size_xl"
+        android:textColor="@color/textColorPrimary"
         tools:text="我发表了一条心情,我发我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情表了一条心情我发表了一条心情我发表了一条心情"
     />
 
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="@color/text_color_h2"
+            android:textColor="@color/textColorTertiary"
             android:textSize="@dimen/text_size_l"
             tools:text="发送给186******72"
         />
@@ -41,8 +41,7 @@
             android:layout_height="20dp"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/flipped_item_tv_send_to"
-            android:background="@color/text_color_tag"
-
+            android:background="@color/textColorTertiary"
         />
 
         <TextView
@@ -52,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/flipped_item_iv_divider"
-            android:textColor="@color/text_color_h2"
+            android:textColor="@color/textColorTertiary"
             android:textSize="@dimen/text_size_l"
             tools:text="距离：2.3km"
         />
@@ -86,10 +85,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_below="@+id/flipped_item_rl_sender_info"
         android:layout_marginTop="12dp"
-        android:background="@color/color_divider"
+        android:background="@color/textColorTertiary"
     />
 
 </RelativeLayout>

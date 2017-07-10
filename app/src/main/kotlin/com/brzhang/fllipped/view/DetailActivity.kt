@@ -32,6 +32,7 @@ class DetailActivity : FlippedBaseActivity() {
         if (mFlippedId.isEmpty()) {
             finish()
         }
+        initData()
     }
 
     private var msendTo: TextView? = null
@@ -65,7 +66,6 @@ class DetailActivity : FlippedBaseActivity() {
         showNavigationBack()
         hideRight()
         setActTitle("详情")
-        initData()
     }
 
     private fun initData() {
@@ -92,7 +92,7 @@ class DetailActivity : FlippedBaseActivity() {
     }
 
     private fun showFlippedDetail(t: Flippedword?) {
-        msendTo?.text = t?.sendto
+        msendTo?.text = "发送给：${t?.sendto}"
         if (FlippedHelper.getText(t).isBlank()) {
             mtext?.visibility = View.GONE
         } else {

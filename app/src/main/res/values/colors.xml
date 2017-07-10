@@ -3,6 +3,12 @@
     <color name="colorPrimary">#555555</color>
     <color name="colorPrimaryDark">#424242</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary">#C3C3C3</color>
+    <color name="textColorTertiary">#8f8f8f</color>
+
+
     <color name="text_color_h1">#000000</color>
     <color name="text_color_tag">#dcdcdc</color>
     <color name="text_color_h2">#8f8f8f</color>

@@ -14,26 +14,26 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-//        release {
-//            storeFile file('flipped.jsk')
-//            keyAlias 'kok'
-//            keyPassword 'zhang522511622'
-//            storePassword 'zhang522511622'
-//            v2SigningEnabled true
-//        }
-//        debug {
-//            storeFile file('flipped.jsk')
-//            keyAlias 'kok'
-//            keyPassword 'zhang522511622'
-//            storePassword 'zhang522511622'
-//        }
+        release {
+            storeFile file('flipped.jsk')
+            keyAlias 'kok'
+            keyPassword 'zhang522511622'
+            storePassword 'zhang522511622'
+            v2SigningEnabled true
+        }
+        debug {
+            storeFile file('flipped.jsk')
+            keyAlias 'kok'
+            keyPassword 'zhang522511622'
+            storePassword 'zhang522511622'
+        }
     }
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
         debug{
             jniDebuggable true
@@ -104,8 +104,3 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'
 }
-//repositories {
-//    mavenCentral()
-//}
-//buildscript {
-//}

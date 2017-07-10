@@ -43,14 +43,15 @@
         android:id="@+id/myScrollingContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/color_white">
+        android:layout_marginTop="?attr/actionBarSize">
 
         <!-- Your loooooong scrolling content here. -->
         <FrameLayout
             android:id="@+id/activity_main_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
+        >
 
         </FrameLayout>
 
@@ -62,6 +63,9 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom"
         app:bb_behavior="shy"
+        android:background="@color/colorPrimary"
+        app:bb_activeTabColor="@color/colorAccent"
+        app:bb_inActiveTabColor="@color/colorPrimaryDark"
         app:bb_tabXmlResource="@xml/bottombar"/>
 
     <com.wang.avi.AVLoadingIndicatorView
@@ -71,7 +75,7 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:indicatorColor="@color/colorPrimaryDark"
+        app:indicatorColor="@color/colorAccent"
         app:indicatorName="BallClipRotatePulseIndicator"
     />
 

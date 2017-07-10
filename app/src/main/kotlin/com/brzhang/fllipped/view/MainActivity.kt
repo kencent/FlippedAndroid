@@ -1,5 +1,6 @@
 package com.brzhang.fllipped.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -40,6 +41,14 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
         //showNavigationBack()
+        activity_main_right_button.setOnClickListener({
+            startPostActivity()
+        })
+    }
+
+    private fun startPostActivity() {
+        val intent = Intent(this,PostActivity::class.java)
+        startActivity(intent)
     }
 
     fun showNavigationBack() {

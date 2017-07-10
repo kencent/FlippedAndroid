@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorTertiary">@color/textColorTertiary</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
@@ -22,5 +25,4 @@
     <style name="OverFlowIcon" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_restaurants</item>
     </style>
-
 </resources>

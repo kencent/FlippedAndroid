@@ -72,13 +72,16 @@ object RetrofitClient {
         val rd = Random().nextInt(100000)
         val method = chain.request().method()
         val uri = chain.request().url()
-        val body = chain.request().body()?.toString() ?: ""
-
+        var body = ""
+        if (method.toUpperCase().equals("POST") || method.toUpperCase().equals("PUT")){
+            body = UserPref.getRequestbody(App.ApplicationContext())
+        }
+//        val body = chain.request().body()?.toString() ?: ""
         LogUtil.dLoge("hoolly", "request body is [$body]")
         // step 1 key = md5(phone + md5(password + s))
         val key = EncodeUtils.md5(username + EncodeUtils.md5(password+salt))
         // step 2 signature = base64(hmac_sha1(key, username + ts + rd + method + uri + body))
-        val data = username + ts + rd + method + uri.encodedPath() + body
+        val data = username + ts + rd + method + uri.url().file + body
         val signature = Base64.encodeToString(EncodeUtils.hamcsha1(key.toByteArray(), data.toByteArray()), Base64.NO_WRAP)
         LogUtil.dLoge("hoolly", "signature is [$signature]")
         // step 3 token = base64(json_encode({"ts": ts, "rd": rd, "sign": signature}))
