@@ -137,6 +137,7 @@ open class SqureFragment : BaseFragment() {
             } else {
                 holder.tagVideo.visibility = View.GONE
             }
+            holder.itemView.tag = fllippeds?.get(position)?.id
             holder.itemView.setOnClickListener({
                 view ->
                 startDetailActivity(view.tag.toString())
