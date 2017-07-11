@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout
 import com.brzhang.fllipped.model.FlippedsResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
@@ -17,13 +18,24 @@ import rx.schedulers.Schedulers
  */
 class MineSendFragment : SqureFragment() {
 
+    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
+        initData()
+        return true
+    }
+
+    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
+        lastId = ""
+        initData()
+    }
+
+    var lastId:String  =""
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun askFlippedList() {
         fllippedNetService()
-                .getMypubFlippedwords()
+                .getMypubFlippedwords(lastId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
@@ -37,7 +49,12 @@ class MineSendFragment : SqureFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        showFlippedList(flippesResonse)
+                        if (lastId.isEmpty()){
+                            showFlippedList(flippesResonse)
+                        }else{
+                            appendFlippedList(flippesResonse)
+                        }
+                        lastId = flippesResonse.flippedwords?.last()?.id.toString()
                     }
                 })
     }

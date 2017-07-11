@@ -1,6 +1,12 @@
 package com.brzhang.fllipped.pref
 
 import android.content.Context
+import com.brzhang.fllipped.model.LatLng
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.tencent.map.geolocation.TencentLocation
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  *
@@ -15,7 +21,7 @@ object UserPref {
     val KEY_PASSWORD = "userpassword"
     val KEY_IS_USER_LOGIN = "islogin"
 
-    var KEY_REQUEST_BODY = "key_request_body"
+    var KEY_USER_LOCATION = "key_user_location"
 
     fun getString(ctx: Context, key: String, defaultValue: String): String {
         val sp = ctx.getSharedPreferences(PREF_NAME,
@@ -74,12 +80,21 @@ object UserPref {
         setBoolean(context, KEY_IS_USER_LOGIN, userLogin)
     }
 
-    fun  setRequestbody(context: Context, toJson: String = "{}") {
-        setString(context,KEY_REQUEST_BODY,toJson)
+    fun setUserLocation(context: Context, mLocation: TencentLocation?) {
+        var latlng = LatLng()
+        latlng.lat = mLocation?.latitude
+        latlng.lng = mLocation?.longitude
+        setString(context,KEY_USER_LOCATION,Gson().toJson(latlng).toString())
     }
 
-    fun getRequestbody(context: Context) :String{
-        return getString(context,KEY_REQUEST_BODY,"{}")
+    fun getUserLocation(context: Context):LatLng?{
+        var latlngStr = getString(context, KEY_USER_LOCATION,"{}")
+        if (latlngStr.equals("{}")){
+            return null
+        }else{
+            var latLng = Gson().fromJson(latlngStr,LatLng::class.java)
+            return latLng
+        }
     }
 
 }

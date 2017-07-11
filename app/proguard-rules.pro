@@ -23,8 +23,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
- -keep public class * extends android.app.Fragment
-
+-keep public class * extends android.app.Fragment
+-keep class android.databinding.BindingAdapter
 # packer-ng 用到了反射
 -keep class com.mcxiaoke.packer.** {*;}
 
@@ -94,6 +94,14 @@
 # For using GSON @Expose annotation
 -keepattributes *Annotation*
 
+-keepclassmembers class ** {
+    public void on*Event(...);
+}
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-dontwarn  org.eclipse.jdt.annotation.**
+
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 
@@ -121,8 +129,12 @@
 }
 
 # mta
--keep class com.tencent.stat.**  {* ;}
--keep class com.tencent.mid.**  {* ;}
+#-keep class com.tencent.stat.**  {* ;}
+#-keep class com.tencent.mid.**  {* ;}
+#-keep class org.apache.thrift.**  {* ;}
+-keep class com.tencent.** { *; }
+
+-dontwarn com.tencent.mta.track.**
 
 # pinyin4j
 -dontwarn demo.**
@@ -192,6 +204,9 @@
 -dontwarn com.roughike.bottombar.**
 
 -dontwarn com.nimbusds.srp6.cli.**
+
+-dontwarn c.t.m.g.**
+-dontwarn cn.bingoogolapple.refreshlayout.adapters.**
 
 
 # for DexGuard only

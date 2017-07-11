@@ -2,16 +2,17 @@ package com.brzhang.fllipped.view
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.MediaController
 import android.widget.TextView
-import android.widget.VideoView
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.Flippedword
 import com.bumptech.glide.Glide
+import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import com.devbrackets.android.exomedia.ui.widget.VideoView
 import kotlinx.android.synthetic.main.activity_flipped_detail.*
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
@@ -22,7 +23,7 @@ import rx.schedulers.Schedulers
  * Created by brzhang on 2017/7/9.
  * Description :
  */
-class DetailActivity : FlippedBaseActivity() {
+class DetailActivity : FlippedBaseActivity() ,OnPreparedListener{
 
     private var mFlippedId = ""
 
@@ -39,7 +40,7 @@ class DetailActivity : FlippedBaseActivity() {
 
     private var mtext: TextView? = null
 
-    private var mAudio: MediaController? = null
+    private var mAudio: VideoView? = null
 
     private var mImage: ImageView? = null
 
@@ -63,9 +64,14 @@ class DetailActivity : FlippedBaseActivity() {
         mImage = flipped_detail_image
         mVideo = flipped_detail_video
 
+        mVideo?.setOnPreparedListener(this)
         showNavigationBack()
         hideRight()
         setActTitle("详情")
+    }
+
+    override fun onPrepared() {
+        mVideo?.start()
     }
 
     private fun initData() {
@@ -104,7 +110,7 @@ class DetailActivity : FlippedBaseActivity() {
         } else {
             mAudio?.visibility = View.VISIBLE
 //            mAudio?.text = FlippedHelper.getText(t)
-            TODO("play audio")
+            mAudio?.setVideoURI(Uri.parse(FlippedHelper.getVoice(t)))
         }
         if (FlippedHelper.getPic(t).isBlank()) {
             mImage?.visibility = View.GONE
@@ -116,7 +122,7 @@ class DetailActivity : FlippedBaseActivity() {
             mVideo?.visibility = View.GONE
         } else {
             mVideo?.visibility = View.VISIBLE
-            TODO("play video")
+            mVideo?.setVideoURI(Uri.parse(FlippedHelper.getVideo(t)))
         }
     }
 

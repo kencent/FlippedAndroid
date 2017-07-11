@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/activity_main_right_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:src="@drawable/flipped_ic_add"
@@ -34,7 +34,7 @@
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:text="发布"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_l"
             android:visibility="gone"/>
 
     </android.support.v7.widget.Toolbar>

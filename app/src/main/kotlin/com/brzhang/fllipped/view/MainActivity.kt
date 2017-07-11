@@ -18,6 +18,7 @@ class MainActivity : BaseActivity() {
     val mMineFragment = MineFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        needLocation = true
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         loginCheck()

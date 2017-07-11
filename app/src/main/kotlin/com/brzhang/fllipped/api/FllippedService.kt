@@ -26,10 +26,10 @@ interface FllippedService {
     fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
     @GET("nearby_flippedwords")
-    fun getNearByFlippeds(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>
+    fun getNearByFlippeds(@QueryMap querys: Map<String, Double>): Observable<FlippedsResponse>
 
     @GET("mypub_flippedwords")
-    fun getMypubFlippedwords(): Observable<FlippedsResponse>
+    fun getMypubFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
 
     @GET("my_flippedwords")
     fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>

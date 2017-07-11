@@ -10,10 +10,13 @@ import com.brzhang.fllipped.utils.EncodeUtils
 import com.brzhang.fllipped.utils.LogUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.Buffer
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.util.*
 
 /**
@@ -37,7 +40,7 @@ object RetrofitClient {
                 salt = UserPref.getUserSalt(App.ApplicationContext(), "")
             }
 
-            if (username.isEmpty()){
+            if (username.isEmpty()) {
                 username = "10000"
             }
 
@@ -73,14 +76,14 @@ object RetrofitClient {
         val method = chain.request().method()
         val uri = chain.request().url()
         var body = ""
-        if (method.toUpperCase().equals("POST") || method.toUpperCase().equals("PUT")){
-            body = UserPref.getRequestbody(App.ApplicationContext())
+        if (method.toUpperCase().equals("POST") || method.toUpperCase().equals("PUT")) {
+            body = bodyToString(chain.request())
         }
-//        val body = chain.request().body()?.toString() ?: ""
         LogUtil.dLoge("hoolly", "request body is [$body]")
         // step 1 key = md5(phone + md5(password + s))
-        val key = EncodeUtils.md5(username + EncodeUtils.md5(password+salt))
+        val key = EncodeUtils.md5(username + EncodeUtils.md5(password + salt))
         // step 2 signature = base64(hmac_sha1(key, username + ts + rd + method + uri + body))
+        LogUtil.dLoge("hoolly", "request uri is [$uri.url().file]")
         val data = username + ts + rd + method + uri.url().file + body
         val signature = Base64.encodeToString(EncodeUtils.hamcsha1(key.toByteArray(), data.toByteArray()), Base64.NO_WRAP)
         LogUtil.dLoge("hoolly", "signature is [$signature]")
@@ -92,5 +95,18 @@ object RetrofitClient {
         val token = Base64.encodeToString(tokenJson.toString().toByteArray(), Base64.NO_WRAP)
         LogUtil.dLoge("hoolly", "token is [$token]")
         return token
+    }
+
+    private fun bodyToString(request: Request): String {
+
+        try {
+            val copy = request.newBuilder().build()
+            val buffer = Buffer()
+            copy.body().writeTo(buffer)
+            return buffer.readUtf8()
+        } catch (e: IOException) {
+            return ""
+        }
+
     }
 }

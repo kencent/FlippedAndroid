@@ -9,10 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout
+import cn.bingoogolapple.refreshlayout.BGARefreshViewHolder
+import cn.bingoogolapple.refreshlayout.BGAStickinessRefreshViewHolder
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.pref.UserPref
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -23,7 +27,14 @@ import java.util.ArrayList
  * Description :
  */
 
-open class SqureFragment : BaseFragment() {
+open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDelegate {
+    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
+        return false
+    }
+
+    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
+        initData()
+    }
 
 
     private var mAdapter: SqureFllippedAdapter? = null
@@ -39,11 +50,44 @@ open class SqureFragment : BaseFragment() {
         return view
     }
 
+    private var refreshView: BGARefreshLayout? = null
+
     protected fun setupView(view: View?) {
+        refreshView = view?.findViewById(R.id.fragment_squre_recycler_view_refresh) as BGARefreshLayout
+        initRefreshLayout(refreshView!!)
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mAdapter = SqureFllippedAdapter()
         recyclerView.adapter = mAdapter
+    }
+
+    fun initRefreshLayout(mRefreshLayout: BGARefreshLayout) {
+        // 为BGARefreshLayout 设置代理
+        mRefreshLayout.setDelegate(this)
+        // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
+        var refreshViewHolder = BGAStickinessRefreshViewHolder(context, true)
+        refreshViewHolder.setRotateImage(R.drawable.ic_refresh)
+        refreshViewHolder.setStickinessColor(R.color.colorAccent)
+        // 设置下拉刷新和上拉加载更多的风格
+        mRefreshLayout.setRefreshViewHolder(refreshViewHolder)
+
+
+        // 为了增加下拉刷新头部和加载更多的通用性，提供了以下可选配置选项  -------------START
+        // 设置正在加载更多时不显示加载更多控件
+        // mRefreshLayout.setIsShowLoadingMoreView(false);
+        // 设置正在加载更多时的文本
+        refreshViewHolder.setLoadingMoreText("正在加载数据")
+        // 设置整个加载更多控件的背景颜色资源 id
+//        refreshViewHolder.setLoadMoreBackgroundColorRes(loadMoreBackgroundColorRes)
+        // 设置整个加载更多控件的背景 drawable 资源 id
+//        refreshViewHolder.setLoadMoreBackgroundDrawableRes(loadMoreBackgroundDrawableRes)
+        // 设置下拉刷新控件的背景颜色资源 id
+//        refreshViewHolder.setRefreshViewBackgroundColorRes(refreshViewBackgroundColorRes)
+        // 设置下拉刷新控件的背景 drawable 资源 id
+//        refreshViewHolder.setRefreshViewBackgroundDrawableRes(refreshViewBackgroundDrawableRes)
+        // 设置自定义头部视图（也可以不用设置）     参数1：自定义头部视图（例如广告位）， 参数2：上拉加载更多是否可用
+//        mRefreshLayout.setCustomHeaderView(mBanner, false)
+        // 可选配置  -------------END
     }
 
     protected fun initData() {
@@ -52,8 +96,15 @@ open class SqureFragment : BaseFragment() {
     }
 
     open fun askFlippedList() {
+
+        var params = HashMap<String, Double>()
+        val latLng = UserPref.getUserLocation(activity)
+        if (latLng != null) {
+            params.put("lat", latLng?.lat!!)
+            params.put("lng", latLng?.lng!!)
+        }
         fllippedNetService()
-                .getNearByFlippeds(HashMap<String, String>())
+                .getNearByFlippeds(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
@@ -77,17 +128,28 @@ open class SqureFragment : BaseFragment() {
         mAdapter?.notifyDataSetChanged()
     }
 
+    fun appendFlippedList(flippesResonse: FlippedsResponse) {
+        var list = mutableListOf<Flippedword>()
+        list.addAll(mAdapter?.fllippeds!!)
+        list.addAll(flippesResonse.flippedwords!!)
+        mAdapter?.fllippeds = list
+        mAdapter?.notifyDataSetChanged()
+    }
+
 
     protected fun hideLoadingView() {
-        if (activity is MainActivity) {
-            (activity as MainActivity).hideProgressBar()
-        }
+//        if (activity is MainActivity) {
+//            (activity as MainActivity).hideProgressBar()
+//        }
+        refreshView?.endRefreshing()
+        //refreshView?.endLoadingMore()
     }
 
     protected fun showLoadingView() {
-        if (activity is MainActivity) {
-            (activity as MainActivity).showProgressBar()
-        }
+//        if (activity is MainActivity) {
+//            (activity as MainActivity).showProgressBar()
+//        }
+        refreshView?.beginRefreshing()
     }
 
 
@@ -121,7 +183,7 @@ open class SqureFragment : BaseFragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = "发送给：${fllippeds?.get(position)?.sendto.toString()}"
-            holder.flippedDistance.text = fllippeds?.get(position)?.distance?.toString()
+            holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(fllippeds?.get(position))}"
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE
             } else {
@@ -133,7 +195,7 @@ open class SqureFragment : BaseFragment() {
                 holder.tagVoice.visibility = View.GONE
             }
             if (!FlippedHelper.getVideo(fllippeds?.get(position)).isEmpty()) {
-                holder.tagVoice.visibility = View.VISIBLE
+                holder.tagVideo.visibility = View.VISIBLE
             } else {
                 holder.tagVideo.visibility = View.GONE
             }
@@ -150,7 +212,7 @@ open class SqureFragment : BaseFragment() {
     }
 
     private fun startDetailActivity(flippedId: String) {
-        DetailActivity.startMe(context,flippedId)
+        DetailActivity.startMe(context, flippedId)
     }
 
     private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

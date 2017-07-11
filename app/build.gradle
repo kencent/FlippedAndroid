@@ -12,6 +12,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
     }
     signingConfigs {
         release {
@@ -35,7 +41,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        debug{
+        debug {
             jniDebuggable true
             renderscriptDebuggable true
             debuggable true
@@ -43,16 +49,26 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.jniLibs.srcDirs = ['libs']
     }
     productFlavors {
-        dev{
-
+        dev {
+            manifestPlaceholders = [
+                    MTA_APPKEY: "AE1XN1P6U9FU",
+                    MTA_CHANNEL:"dev"
+            ]
         }
-        forTest{
-
+        forTest {
+            manifestPlaceholders = [
+                    MTA_APPKEY: "AE1XN1P6U9FU",
+                    MTA_CHANNEL:"dev"
+            ]
         }
-        rel{
-
+        rel {
+            manifestPlaceholders = [
+                    MTA_APPKEY: "AWQ3B97G3LUC",
+                    MTA_CHANNEL:"dev"
+            ]
         }
     }
 }
@@ -87,7 +103,8 @@ dependencies {
     compile 'com.wang.avi:library:2.1.3'
 
     //well-designed local image and video selector
-    compile 'com.zhihu.android:matisse:0.4.3'
+//    compile 'com.zhihu.android:matisse:0.4.3'
+    compile 'com.zhihu.android:matisse:0.5.0-alpha4'
 
     // glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -100,6 +117,17 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 
     compile 'com.tencent.cos:cos:4.3.2+@aar'
+
+    //MTA的jar包
+    compile 'com.qq.mta:mta:3.0.3-alpha'
+    //midjar包
+    compile 'com.tencent.mid:mid:3.721-alpha'
+
+    //exo
+    compile 'com.devbrackets.android:exomedia:4.0.2'
+
+    //refresh
+    compile 'cn.bingoogolapple:bga-refreshlayout:1.1.7@aar'
 
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'

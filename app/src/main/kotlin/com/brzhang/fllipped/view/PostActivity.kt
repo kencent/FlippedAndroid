@@ -4,25 +4,24 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.afollestad.materialdialogs.MaterialDialog
+import com.brzhang.fllipped.HttpUtils
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.Content
 import com.brzhang.fllipped.model.Flippedword
-import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.brzhang.fllipped.utils.UploadUtils
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import kotlinx.android.synthetic.main.activity_post.*
-import org.json.JSONObject
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -50,22 +49,13 @@ class PostActivity : FlippedBaseActivity() {
 
     private var mAudioRl: RelativeLayout? = null
 
-    var subscriber = object : Subscriber<Flippedword>() {
-        override fun onNext(t: Flippedword?) {
-            LogUtil.dLoge("hoolly",t?.id.toString())
-        }
-
-        override fun onCompleted() {
-
-        }
-
-        override fun onError(e: Throwable?) {
-            LogUtil.dLoge("hoolly",e?.message)
-        }
-    }
-
     override fun onOptionHomeClick() {
         this.finish()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        needLocation = true
+        super.onCreate(savedInstanceState)
     }
 
     override fun handleRxEvent(event: Any?) {
@@ -105,6 +95,28 @@ class PostActivity : FlippedBaseActivity() {
 
     private fun selectVideo() {
 
+        if (mImageContent?.visibility == View.GONE) {
+            rxPermissions?.request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    ?.subscribe { grant ->
+                        if (grant) {
+                            Matisse.from(this)
+                                    .choose(MimeType.ofVideo())
+                                    .theme(R.style.Matisse_Dracula)
+                                    .countable(true)
+                                    .maxSelectable(1)
+//                    .gridExpectedSize(resources.getDimensionPixelSize(R.dimen.grid_expected_size))
+                                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                                    .thumbnailScale(0.85f)
+                                    .imageEngine(GlideEngine())
+                                    .forResult(REQUEST_CODE_CHOOSE)
+                        } else {
+                            toast("请到权限中开启授权")
+                        }
+                    }
+
+        } else {
+            showDeleteSelectedImage()
+        }
 
     }
 
@@ -158,23 +170,24 @@ class PostActivity : FlippedBaseActivity() {
 
     private fun postFlipped() {
 
-        if (mPhone?.text.toString().isBlank()){
+        if (mPhone?.text.toString().isBlank()) {
             toast("还没有填发送给谁")
             return
         }
 
-        if (mText?.text.toString().isBlank()){
+        if (mText?.text.toString().isBlank()) {
             toast("写点什么话吧")
             return
         }
+        showProgressBar()
 
         if (mSelected?.size > 0) {
             val path = UploadUtils.UriToPath(this, mSelected[0])
-            fllippedNetService()
+            mSubScription.add(fllippedNetService()
                     .getSign()
                     .subscribeOn(Schedulers.io())
                     .flatMap { t: SignResponse? ->
-                        UploadUtils.uploadImage(t!!.sig, path)
+                        UploadUtils.uploadFile(t!!.sig, path,UploadUtils.FileType.IMAGE)
                     }
                     .flatMap { t: String? ->
                         var flippedWord = Flippedword()
@@ -186,11 +199,26 @@ class PostActivity : FlippedBaseActivity() {
                         contentImage.type = Content.Type.PICUTRE.type
                         contentImage.text = t
                         flippedWord.contents = mutableListOf(contentText, contentImage)
-                        UserPref.setRequestbody(this,Gson().toJson(flippedWord))
                         fllippedNetService().createFllipped(flippedWord)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber)
+                    .subscribe(object : Subscriber<Flippedword>() {
+                        override fun onNext(t: Flippedword?) {
+                            LogUtil.dLoge("hoolly", t?.id.toString())
+                            toast("发布成功")
+                            finish()
+                        }
+
+                        override fun onCompleted() {
+                            hideProgressBar()
+                        }
+
+                        override fun onError(e: Throwable?) {
+                            LogUtil.dLoge("hoolly", e?.message)
+                            hideProgressBar()
+                            toast(HttpUtils.getError(e))
+                        }
+                    }))
         } else {
             var flippedWord = Flippedword()
             flippedWord.sendto = mPhone?.text.toString()
@@ -198,15 +226,29 @@ class PostActivity : FlippedBaseActivity() {
             contentText.type = Content.Type.TEXT.type
             contentText.text = mText?.text.toString()
             flippedWord.contents = mutableListOf(contentText)
-            UserPref.setRequestbody(this,Gson().toJson(flippedWord))
-            fllippedNetService().createFllipped(flippedWord)
+            mSubScription.add(fllippedNetService().createFllipped(flippedWord)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber)
+                    .subscribe(object : Subscriber<Flippedword>() {
+                        override fun onNext(t: Flippedword?) {
+                            LogUtil.dLoge("hoolly", t?.id.toString())
+                            toast("发布成功")
+                            finish()
+                        }
+
+                        override fun onCompleted() {
+                            hideProgressBar()
+                        }
+
+                        override fun onError(e: Throwable?) {
+                            LogUtil.dLoge("hoolly", e?.message)
+                            hideProgressBar()
+                            toast(HttpUtils.getError(e))
+                        }
+                    }))
         }
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

@@ -20,7 +20,14 @@ import rx.Observable
 
 object UploadUtils {
 
-    fun uploadImage(sign: String, imagePath: String): Observable<String> {
+    enum class FileType {
+        IMAGE,
+        VIDEO,
+        AUDIO
+    }
+
+    /*长传统一接口*/
+    fun uploadFile(sign: String, filePath: String, type: FileType): Observable<String> {
         var bizService = BizService.instance()
         bizService.init(App.ApplicationContext())
 
@@ -29,9 +36,21 @@ object UploadUtils {
         /** 设置Bucket */
         putObjectRequest.bucket = bizService.bucket
         /** 设置cosPath :远程路径*/
-        putObjectRequest.cosPath =   "/" +UserPref.getUserName(App.ApplicationContext(), "10000")+ FileUtils.getFileName(imagePath)
+        var filetype = ""
+        when (type) {
+            FileType.IMAGE -> {
+                filetype = "images/"
+            }
+            FileType.VIDEO -> {
+                filetype = "videos/"
+            }
+            FileType.AUDIO -> {
+                filetype = "audios/"
+            }
+        }
+        putObjectRequest.cosPath = "/$filetype" + UserPref.getUserName(App.ApplicationContext(), "10000") + FileUtils.getFileName(filePath)
         /** 设置srcPath: 本地文件的路径 */
-        putObjectRequest.srcPath = imagePath
+        putObjectRequest.srcPath = filePath
         /** 设置 insertOnly: 是否上传覆盖同名文件*/
         putObjectRequest.insertOnly = "1"
         /** 设置sign: 签名，此处使用多次签名 */
@@ -69,15 +88,14 @@ object UploadUtils {
 //            }
 //        }
         /** 发送请求：同步执行 */
-//        bizService.cosClient.putObject(putObjectRequest)
+        //        bizService.cosClient.putObject(putObjectRequest)
         return Observable.create {
-            subs->
+            subs ->
             val result = bizService.cosClient.putObject(putObjectRequest)
-            if (result.code == 0){
+            if (result.code == 0) {
                 subs.onNext(result.access_url)
                 subs.onCompleted()
-            }
-            else {
+            } else {
                 subs.onError(Error(result.msg))
             }
         }

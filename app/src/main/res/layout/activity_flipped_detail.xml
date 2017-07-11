@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingBottom="30dp"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_horizontal_margin"
-              tools:context=".view.DetailActivity"
->
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingBottom="30dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    tools:context=".view.DetailActivity">
     <TextView
         android:id="@+id/flipped_detail_tv_send_to"
         android:layout_width="match_parent"
@@ -24,22 +25,20 @@
         android:text=""
         android:textSize="@dimen/text_size_xl"
         tools:text="交分解为我啊放假哦我就爱非叫我我我叫阿佛我瓦尔平均分完"/>
-    <MediaController
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/flipped_detail_audio"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:visibility="gone"
-    />
+        android:layout_height="50dp"
+        app:useDefaultControls="true"/>
     <ImageView
         android:id="@+id/flipped_detail_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:scaleType="centerCrop"
     />
-    <VideoView
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/flipped_detail_video"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="300dp"
+        app:useDefaultControls="true"/>
 </LinearLayout>

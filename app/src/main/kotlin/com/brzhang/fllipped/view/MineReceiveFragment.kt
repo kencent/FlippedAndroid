@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout
 import com.brzhang.fllipped.model.FlippedsResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
@@ -18,6 +19,16 @@ import rx.schedulers.Schedulers
 class MineReceiveFragment : SqureFragment() {
 
     var mflippedId = ""
+    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
+        initData()
+        return true
+    }
+
+    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
+        mflippedId = ""
+        initData()
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -38,7 +49,12 @@ class MineReceiveFragment : SqureFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        showFlippedList(flippesResonse)
+                        if (mflippedId.isEmpty()){
+                            showFlippedList(flippesResonse)
+                        }else{
+                            appendFlippedList(flippesResonse)
+                        }
+
                         extractMaxFlippedId(flippesResonse)
                     }
                 })
