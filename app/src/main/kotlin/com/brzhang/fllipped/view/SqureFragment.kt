@@ -95,6 +95,10 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         askFlippedList()
     }
 
+    protected open fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
+        holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(flippedword)}"
+    }
+
     open fun askFlippedList() {
 
         var params = HashMap<String, Double>()
@@ -183,7 +187,7 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = "发送给：${fllippeds?.get(position)?.sendto.toString()}"
-            holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(fllippeds?.get(position))}"
+            showDistanceOrReadState(holder,fllippeds?.get(position))
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE
             } else {
@@ -215,7 +219,7 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         DetailActivity.startMe(context, flippedId)
     }
 
-    private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView

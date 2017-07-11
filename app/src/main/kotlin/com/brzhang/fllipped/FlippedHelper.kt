@@ -8,6 +8,16 @@ import com.brzhang.fllipped.model.Flippedword
  * Description :
  */
 object FlippedHelper {
+//    # status取值：
+//    # 	0 新发表
+//    # 	100 已下发给接收人客户端
+//    # 	200 接收人已读
+
+    enum class FlippedState(val value: Int) {
+        NEW(0),
+        RECEIVE(100),
+        READ(200)
+    }
 
     fun getText(flippedword: Flippedword?): String {
         if (flippedword == null) {
@@ -66,8 +76,25 @@ object FlippedHelper {
         var distance = flippedword?.distance ?: 0
         if (distance > 1000) {
             return String.format("%.1fkm", distance / 1000.0)
-        }else{
+        } else {
             return "${distance}m"
+        }
+    }
+
+    fun getReadState(flippedword: Flippedword?): String? {
+        when (flippedword?.status) {
+            FlippedState.NEW.ordinal -> {
+                return "对方未读"
+            }
+            FlippedState.RECEIVE.ordinal -> {
+                return "已送达"
+            }
+            FlippedState.READ.ordinal -> {
+                return "对方已读"
+            }
+            else -> {
+                return "对方不在平台"
+            }
         }
     }
 

@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout
+import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.model.FlippedsResponse
+import com.brzhang.fllipped.model.Flippedword
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -31,6 +33,9 @@ class MineSendFragment : SqureFragment() {
     var lastId:String  =""
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+    override fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?){
+        holder.flippedDistance.text = FlippedHelper.getReadState(flippedword)
     }
 
     override fun askFlippedList() {
