@@ -20,6 +20,7 @@ import rx.schedulers.Schedulers
  */
 class MineSendFragment : SqureFragment() {
 
+    var lastId: String = ""
     override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
         initData()
         return true
@@ -30,11 +31,12 @@ class MineSendFragment : SqureFragment() {
         initData()
     }
 
-    var lastId:String  =""
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
-    override fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?){
+
+    override fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
         holder.flippedDistance.text = FlippedHelper.getReadState(flippedword)
     }
 
@@ -54,15 +56,16 @@ class MineSendFragment : SqureFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        if (lastId.isEmpty()){
+                        if (lastId.isEmpty()) {
                             showFlippedList(flippesResonse)
-                        }else{
+                        } else {
                             appendFlippedList(flippesResonse)
                         }
                         lastId = flippesResonse.flippedwords?.last()?.id.toString()
                     }
                 })
     }
+
     companion object {
 
         fun newInstance(): MineSendFragment {
@@ -74,5 +77,5 @@ class MineSendFragment : SqureFragment() {
             return fragment
         }
     }
-    
+
 }

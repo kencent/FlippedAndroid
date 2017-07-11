@@ -146,7 +146,7 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
 //            (activity as MainActivity).hideProgressBar()
 //        }
         refreshView?.endRefreshing()
-        //refreshView?.endLoadingMore()
+        refreshView?.endLoadingMore()
     }
 
     protected fun showLoadingView() {

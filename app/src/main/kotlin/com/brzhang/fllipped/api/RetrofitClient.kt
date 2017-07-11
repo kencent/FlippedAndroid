@@ -83,7 +83,7 @@ object RetrofitClient {
         // step 1 key = md5(phone + md5(password + s))
         val key = EncodeUtils.md5(username + EncodeUtils.md5(password + salt))
         // step 2 signature = base64(hmac_sha1(key, username + ts + rd + method + uri + body))
-        LogUtil.dLoge("hoolly", "request uri is [$uri.url().file]")
+        LogUtil.dLoge("hoolly", "request uri is [${uri.url().file}]")
         val data = username + ts + rd + method + uri.url().file + body
         val signature = Base64.encodeToString(EncodeUtils.hamcsha1(key.toByteArray(), data.toByteArray()), Base64.NO_WRAP)
         LogUtil.dLoge("hoolly", "signature is [$signature]")
