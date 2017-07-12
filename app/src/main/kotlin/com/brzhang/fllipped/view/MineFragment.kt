@@ -39,10 +39,10 @@ class MineFragment : BaseFragment() {
         val tabLayout = view?.findViewById(R.id.fragment_mine_tab_layout) as TabLayout
         var viewPager = view?.findViewById(R.id.fragment_mine_view_pager) as ViewPager
         val pageAdapter = MyPageAdatper(childFragmentManager)
-        pageAdapter.fragments = arrayListOf(MineSendFragment.newInstance(),MineReceiveFragment.newInstance())
-        pageAdapter.titles = arrayListOf("我发送的","我收到的")
+        pageAdapter.fragments = arrayListOf(MineSendFragment.newInstance(), MineReceiveFragment.newInstance())
+        pageAdapter.titles = arrayListOf("我发送的", "我收到的")
         viewPager.adapter = pageAdapter
-        tabLayout.setupWithViewPager(viewPager,true)
+        tabLayout.setupWithViewPager(viewPager, true)
         tabLayout.tabMode = TabLayout.MODE_FIXED
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
     }

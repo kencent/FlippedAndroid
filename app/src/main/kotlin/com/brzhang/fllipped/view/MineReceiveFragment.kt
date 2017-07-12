@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import cn.bingoogolapple.refreshlayout.BGARefreshLayout
+import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -19,18 +21,25 @@ import rx.schedulers.Schedulers
 class MineReceiveFragment : SqureFragment() {
 
     var mflippedId = ""
-    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
-        initData()
-        return true
-    }
-
-    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
-        mflippedId = ""
-        initData()
-    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun initRefreshLayout(mRefreshLayout: TwinklingRefreshLayout) {
+        //super.initRefreshLayout(mRefreshLayout)
+        mRefreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                super.onRefresh(refreshLayout)
+                mflippedId = ""
+                askData()
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                super.onLoadMore(refreshLayout)
+                askData()
+            }
+        })
     }
 
     override fun askFlippedList() {
@@ -49,12 +58,16 @@ class MineReceiveFragment : SqureFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        if (mflippedId.isEmpty()){
+                        if (flippesResonse.flippedwords == null || flippesResonse.flippedwords?.size == 0) {
+                            nomoreView(R.string.no_more_receive)
+                            return
+                        }
+                        if (mflippedId.isEmpty()) {
                             showFlippedList(flippesResonse)
-                        }else{
+                        } else {
                             appendFlippedList(flippesResonse)
                         }
-
+                        nomoreView(R.string.no_more_receive)
                         extractMaxFlippedId(flippesResonse)
                     }
                 })

@@ -10,7 +10,9 @@
     <string name="activity_main_default_title">广场</string>
     <string name="activity_post_title">发布动心话</string>
     <string name="prompt_post_activity_phone">输入Ta的手机</string>
-    <string name="prompt_post_activity_words">说句心动的话</string>
-    <item name="visible" type="id"/>
-    <item name="masked" type="id"/>
+    <string name="prompt_post_activity_words">输入心动的话</string>
+    <string name="no_more_send">你还没有对Ta发表过心动的话，\n赶紧点右上角发一个吧~~</string>
+    <string name="no_more_receive">还没有人对你说过心动的话，\n赶紧邀请他加入吧~</string>
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
 </resources>
