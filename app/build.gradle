@@ -21,14 +21,14 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('flipped.jsk')
+            storeFile file('flipped.jks')
             keyAlias 'kok'
             keyPassword 'zhang522511622'
             storePassword 'zhang522511622'
             v2SigningEnabled true
         }
         debug {
-            storeFile file('flipped.jsk')
+            storeFile file('flipped.jks')
             keyAlias 'kok'
             keyPassword 'zhang522511622'
             storePassword 'zhang522511622'
@@ -127,7 +127,7 @@ dependencies {
     compile 'com.devbrackets.android:exomedia:4.0.2'
 
     //refresh
-    compile 'cn.bingoogolapple:bga-refreshlayout:1.1.7@aar'
+    compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
 
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'

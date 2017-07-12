@@ -9,14 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import cn.bingoogolapple.refreshlayout.BGARefreshLayout
-import cn.bingoogolapple.refreshlayout.BGARefreshViewHolder
-import cn.bingoogolapple.refreshlayout.BGAStickinessRefreshViewHolder
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.pref.UserPref
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -27,14 +26,7 @@ import java.util.ArrayList
  * Description :
  */
 
-open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDelegate {
-    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
-        return false
-    }
-
-    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
-        initData()
-    }
+open class SqureFragment : BaseFragment() {
 
 
     private var mAdapter: SqureFllippedAdapter? = null
@@ -46,14 +38,15 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_squre, container, false)
         setupView(view)
-        initData()
+        showLoadingView()
+        askData()
         return view
     }
 
-    private var refreshView: BGARefreshLayout? = null
+    private var refreshView: TwinklingRefreshLayout? = null
 
     protected fun setupView(view: View?) {
-        refreshView = view?.findViewById(R.id.fragment_squre_recycler_view_refresh) as BGARefreshLayout
+        refreshView = view?.findViewById(R.id.fragment_squre_recycler_view_refresh) as TwinklingRefreshLayout
         initRefreshLayout(refreshView!!)
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -61,37 +54,22 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         recyclerView.adapter = mAdapter
     }
 
-    fun initRefreshLayout(mRefreshLayout: BGARefreshLayout) {
-        // 为BGARefreshLayout 设置代理
-        mRefreshLayout.setDelegate(this)
-        // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
-        var refreshViewHolder = BGAStickinessRefreshViewHolder(context, true)
-        refreshViewHolder.setRotateImage(R.drawable.ic_refresh)
-        refreshViewHolder.setStickinessColor(R.color.colorAccent)
-        // 设置下拉刷新和上拉加载更多的风格
-        mRefreshLayout.setRefreshViewHolder(refreshViewHolder)
+    open fun initRefreshLayout(mRefreshLayout: TwinklingRefreshLayout) {
+        mRefreshLayout.setEnableLoadmore(false)
+        mRefreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                super.onRefresh(refreshLayout)
+                askData()
+            }
 
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                super.onLoadMore(refreshLayout)
+            }
+        })
 
-        // 为了增加下拉刷新头部和加载更多的通用性，提供了以下可选配置选项  -------------START
-        // 设置正在加载更多时不显示加载更多控件
-        // mRefreshLayout.setIsShowLoadingMoreView(false);
-        // 设置正在加载更多时的文本
-        refreshViewHolder.setLoadingMoreText("正在加载数据")
-        // 设置整个加载更多控件的背景颜色资源 id
-//        refreshViewHolder.setLoadMoreBackgroundColorRes(loadMoreBackgroundColorRes)
-        // 设置整个加载更多控件的背景 drawable 资源 id
-//        refreshViewHolder.setLoadMoreBackgroundDrawableRes(loadMoreBackgroundDrawableRes)
-        // 设置下拉刷新控件的背景颜色资源 id
-//        refreshViewHolder.setRefreshViewBackgroundColorRes(refreshViewBackgroundColorRes)
-        // 设置下拉刷新控件的背景 drawable 资源 id
-//        refreshViewHolder.setRefreshViewBackgroundDrawableRes(refreshViewBackgroundDrawableRes)
-        // 设置自定义头部视图（也可以不用设置）     参数1：自定义头部视图（例如广告位）， 参数2：上拉加载更多是否可用
-//        mRefreshLayout.setCustomHeaderView(mBanner, false)
-        // 可选配置  -------------END
     }
 
-    protected fun initData() {
-        showLoadingView()
+    protected fun askData() {
         askFlippedList()
     }
 
@@ -145,15 +123,15 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
 //        if (activity is MainActivity) {
 //            (activity as MainActivity).hideProgressBar()
 //        }
-        refreshView?.endRefreshing()
-        refreshView?.endLoadingMore()
+        refreshView?.finishRefreshing()
+        refreshView?.finishLoadmore()
     }
 
     protected fun showLoadingView() {
 //        if (activity is MainActivity) {
 //            (activity as MainActivity).showProgressBar()
 //        }
-        refreshView?.beginRefreshing()
+        refreshView?.startRefresh()
     }
 
 
@@ -187,7 +165,7 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = "发送给：${fllippeds?.get(position)?.sendto.toString()}"
-            showDistanceOrReadState(holder,fllippeds?.get(position))
+            showDistanceOrReadState(holder, fllippeds?.get(position))
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE
             } else {
@@ -219,7 +197,7 @@ open class SqureFragment : BaseFragment(), BGARefreshLayout.BGARefreshLayoutDele
         DetailActivity.startMe(context, flippedId)
     }
 
-     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView

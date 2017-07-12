@@ -5,10 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import cn.bingoogolapple.refreshlayout.BGARefreshLayout
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -20,17 +21,23 @@ import rx.schedulers.Schedulers
  */
 class MineSendFragment : SqureFragment() {
 
-    var lastId: String = ""
-    override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout?): Boolean {
-        initData()
-        return true
-    }
+    var mflippedId: String = ""
 
-    override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout?) {
-        lastId = ""
-        initData()
-    }
+    override fun initRefreshLayout(mRefreshLayout: TwinklingRefreshLayout) {
+        //super.initRefreshLayout(mRefreshLayout)
+        mRefreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                super.onRefresh(refreshLayout)
+                mflippedId = ""
+                askData()
+            }
 
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                super.onLoadMore(refreshLayout)
+                askData()
+            }
+        })
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -42,7 +49,7 @@ class MineSendFragment : SqureFragment() {
 
     override fun askFlippedList() {
         fllippedNetService()
-                .getMypubFlippedwords(lastId)
+                .getMypubFlippedwords(mflippedId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
@@ -56,12 +63,15 @@ class MineSendFragment : SqureFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        if (lastId.isEmpty()) {
+                        if (flippesResonse.flippedwords == null || flippesResonse.flippedwords?.size == 0) {
+                            return
+                        }
+                        if (mflippedId.isEmpty()) {
                             showFlippedList(flippesResonse)
                         } else {
                             appendFlippedList(flippesResonse)
                         }
-                        lastId = flippesResonse.flippedwords?.last()?.id.toString()
+                        mflippedId = flippesResonse.flippedwords?.last()?.id.toString()
                     }
                 })
     }
