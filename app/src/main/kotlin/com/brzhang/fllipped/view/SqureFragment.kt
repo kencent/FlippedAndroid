@@ -1,6 +1,7 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -45,13 +46,33 @@ open class SqureFragment : BaseFragment() {
 
     private var refreshView: TwinklingRefreshLayout? = null
 
+    private var nomoreView: TextView? = null
+
     protected fun setupView(view: View?) {
         refreshView = view?.findViewById(R.id.fragment_squre_recycler_view_refresh) as TwinklingRefreshLayout
         initRefreshLayout(refreshView!!)
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
+        nomoreView = view?.findViewById(R.id.fragment_squre_no_more_view) as TextView
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mAdapter = SqureFllippedAdapter()
         recyclerView.adapter = mAdapter
+    }
+
+    open fun nomoreView(@IdRes text: Int) {
+        if (mAdapter?.itemCount == 0) {
+            showNoMoreView(text)
+        }else{
+            hideNomoreView()
+        }
+    }
+
+    private fun showNoMoreView(@IdRes text: Int) {
+        nomoreView?.visibility = View.VISIBLE
+        nomoreView?.text = getString(text)
+    }
+
+    private fun hideNomoreView() {
+        nomoreView?.visibility = View.GONE
     }
 
     open fun initRefreshLayout(mRefreshLayout: TwinklingRefreshLayout) {

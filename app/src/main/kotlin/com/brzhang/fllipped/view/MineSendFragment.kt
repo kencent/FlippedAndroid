@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.brzhang.fllipped.FlippedHelper
+import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -64,6 +65,7 @@ class MineSendFragment : SqureFragment() {
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
                         if (flippesResonse.flippedwords == null || flippesResonse.flippedwords?.size == 0) {
+                            nomoreView(R.string.no_more_send)
                             return
                         }
                         if (mflippedId.isEmpty()) {
@@ -71,6 +73,7 @@ class MineSendFragment : SqureFragment() {
                         } else {
                             appendFlippedList(flippesResonse)
                         }
+                        nomoreView(R.string.no_more_send)
                         mflippedId = flippesResonse.flippedwords?.last()?.id.toString()
                     }
                 })

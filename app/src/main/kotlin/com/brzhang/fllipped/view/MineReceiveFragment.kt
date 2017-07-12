@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -58,6 +59,7 @@ class MineReceiveFragment : SqureFragment() {
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
                         if (flippesResonse.flippedwords == null || flippesResonse.flippedwords?.size == 0) {
+                            nomoreView(R.string.no_more_receive)
                             return
                         }
                         if (mflippedId.isEmpty()) {
@@ -65,6 +67,7 @@ class MineReceiveFragment : SqureFragment() {
                         } else {
                             appendFlippedList(flippesResonse)
                         }
+                        nomoreView(R.string.no_more_receive)
                         extractMaxFlippedId(flippesResonse)
                     }
                 })
