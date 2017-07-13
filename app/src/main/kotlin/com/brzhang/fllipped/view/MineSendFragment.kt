@@ -9,6 +9,7 @@ import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
@@ -49,6 +50,7 @@ class MineSendFragment : SqureFragment() {
     }
 
     override fun askFlippedList() {
+        LogUtil.dLoge("hoolly","send fragment load data")
         fllippedNetService()
                 .getMypubFlippedwords(mflippedId)
                 .subscribeOn(Schedulers.io())

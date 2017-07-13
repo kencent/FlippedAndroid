@@ -2,6 +2,7 @@ package com.brzhang.fllipped.pref
 
 import android.content.Context
 import com.brzhang.fllipped.model.LatLng
+import com.brzhang.fllipped.view.PostActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -21,7 +22,9 @@ object UserPref {
     val KEY_PASSWORD = "userpassword"
     val KEY_IS_USER_LOGIN = "islogin"
 
-    var KEY_USER_LOCATION = "key_user_location"
+    val KEY_USER_LOCATION = "key_user_location"
+
+    val KEY_IS_TOAST_NEED_LOGIN = "key_is_toast_need_login"
 
     fun getString(ctx: Context, key: String, defaultValue: String): String {
         val sp = ctx.getSharedPreferences(PREF_NAME,
@@ -84,17 +87,25 @@ object UserPref {
         var latlng = LatLng()
         latlng.lat = mLocation?.latitude
         latlng.lng = mLocation?.longitude
-        setString(context,KEY_USER_LOCATION,Gson().toJson(latlng).toString())
+        setString(context, KEY_USER_LOCATION, Gson().toJson(latlng).toString())
     }
 
-    fun getUserLocation(context: Context):LatLng?{
-        var latlngStr = getString(context, KEY_USER_LOCATION,"{}")
-        if (latlngStr.equals("{}")){
+    fun getUserLocation(context: Context): LatLng? {
+        var latlngStr = getString(context, KEY_USER_LOCATION, "{}")
+        if (latlngStr.equals("{}")) {
             return null
-        }else{
-            var latLng = Gson().fromJson(latlngStr,LatLng::class.java)
+        } else {
+            var latLng = Gson().fromJson(latlngStr, LatLng::class.java)
             return latLng
         }
+    }
+
+    fun isToastNeedLogin(context: Context, defaultValue: Boolean): Boolean {
+        return getBoolean(context, KEY_IS_TOAST_NEED_LOGIN, defaultValue)
+    }
+
+    fun setHasBeenTastNeedLogin(context: Context, value: Boolean) {
+        return setBoolean(context, KEY_IS_TOAST_NEED_LOGIN, value)
     }
 
 }

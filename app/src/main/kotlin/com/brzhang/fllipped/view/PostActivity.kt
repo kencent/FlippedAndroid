@@ -15,6 +15,7 @@ import com.brzhang.fllipped.R
 import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.Content
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.brzhang.fllipped.utils.UploadUtils
 import com.bumptech.glide.Glide
@@ -56,6 +57,29 @@ class PostActivity : FlippedBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         needLocation = true
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!UserPref.isUserLogin(this, false) && UserPref.isToastNeedLogin(this, false)) {
+            showNeedLoginDialog()
+            UserPref.setHasBeenTastNeedLogin(this, true)
+        }
+    }
+
+    private fun showNeedLoginDialog() {
+
+        MaterialDialog.Builder(this)
+                .title("发布心痛的话需要您先登录")
+                .positiveText("去登录")
+                .neutralText("取消")
+                .onPositive { _, _ ->
+                    gotoLoginActivity()
+                }
+                .onNegative { _, _ ->
+
+                }
+                .show()
     }
 
     override fun handleRxEvent(event: Any?) {
@@ -187,7 +211,7 @@ class PostActivity : FlippedBaseActivity() {
                     .getSign()
                     .subscribeOn(Schedulers.io())
                     .flatMap { t: SignResponse? ->
-                        UploadUtils.uploadFile(t!!.sig, path,UploadUtils.FileType.IMAGE)
+                        UploadUtils.uploadFile(t!!.sig, path, UploadUtils.FileType.IMAGE)
                     }
                     .flatMap { t: String? ->
                         var flippedWord = Flippedword()

@@ -33,7 +33,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
 
     override fun setupView(view: View) {
         hideRight()
-        hideNavigationBack()
+        showNavigationBack()
         setActTitle("登录")
 
         flipped_login_tv_about.setOnClickListener(this)
@@ -102,7 +102,6 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
             toast("请输入验证码")
             return
         }
-        UserPref.setUserLogin(this, false)
         UserPref.setUserName(this, flipped_login_et_phone.text.toString())
         UserPref.setUserPassWord(this, flipped_login_et_password.text.toString())
         fllippedNetService().login()

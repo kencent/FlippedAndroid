@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
+import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
@@ -43,6 +44,7 @@ class MineReceiveFragment : SqureFragment() {
     }
 
     override fun askFlippedList() {
+        LogUtil.dLoge("hoolly","receiver fragment load data")
         fllippedNetService()
                 .getReceivesFlippedwords(mflippedId)
                 .subscribeOn(Schedulers.io())

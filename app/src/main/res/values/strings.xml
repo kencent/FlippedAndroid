@@ -13,6 +13,17 @@
     <string name="prompt_post_activity_words">输入心动的话</string>
     <string name="no_more_send">你还没有对Ta发表过心动的话，\n赶紧点右上角发一个吧~~</string>
     <string name="no_more_receive">还没有人对你说过心动的话，\n赶紧邀请他加入吧~</string>
-    <item name="visible" type="id" />
-    <item name="masked" type="id" />
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+    <string name="title_activity_new_main">广场</string>
+
+    <string name="title_about">关于</string>
+    <string name="title_logout">退出登录</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

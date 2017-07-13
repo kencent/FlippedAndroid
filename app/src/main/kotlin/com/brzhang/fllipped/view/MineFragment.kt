@@ -35,11 +35,13 @@ class MineFragment : BaseFragment() {
 
     }
 
+    private var mineSendFragment: MineSendFragment = MineSendFragment.newInstance()
+    private var mineReceiveFragment: MineReceiveFragment = MineReceiveFragment.newInstance()
     private fun setupView(view: View?) {
         val tabLayout = view?.findViewById(R.id.fragment_mine_tab_layout) as TabLayout
         var viewPager = view?.findViewById(R.id.fragment_mine_view_pager) as ViewPager
         val pageAdapter = MyPageAdatper(childFragmentManager)
-        pageAdapter.fragments = arrayListOf(MineSendFragment.newInstance(), MineReceiveFragment.newInstance())
+        pageAdapter.fragments = arrayListOf(mineSendFragment, mineReceiveFragment)
         pageAdapter.titles = arrayListOf("我发送的", "我收到的")
         viewPager.adapter = pageAdapter
         tabLayout.setupWithViewPager(viewPager, true)
@@ -79,5 +81,10 @@ class MineFragment : BaseFragment() {
             return titles[position]
         }
 
+    }
+
+    fun load() {
+        mineSendFragment.fragmentSelected()
+        mineReceiveFragment.fragmentSelected()
     }
 }

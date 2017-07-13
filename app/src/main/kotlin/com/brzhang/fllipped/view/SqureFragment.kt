@@ -15,6 +15,7 @@ import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.pref.UserPref
+import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import rx.Subscriber
@@ -40,7 +41,7 @@ open class SqureFragment : BaseFragment() {
         val view = inflater?.inflate(R.layout.fragment_squre, container, false)
         setupView(view)
         showLoadingView()
-        askData()
+//        askData() fixme 延迟加载
         return view
     }
 
@@ -61,7 +62,7 @@ open class SqureFragment : BaseFragment() {
     open fun nomoreView(@IdRes text: Int) {
         if (mAdapter?.itemCount == 0) {
             showNoMoreView(text)
-        }else{
+        } else {
             hideNomoreView()
         }
     }
@@ -99,7 +100,7 @@ open class SqureFragment : BaseFragment() {
     }
 
     open fun askFlippedList() {
-
+        LogUtil.dLoge("hoolly","squre fragment load data")
         var params = HashMap<String, Double>()
         val latLng = UserPref.getUserLocation(activity)
         if (latLng != null) {
@@ -227,6 +228,10 @@ open class SqureFragment : BaseFragment() {
         val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
         val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView
 
+    }
+
+    fun fragmentSelected() {
+        askData()
     }
 }
 

@@ -21,16 +21,13 @@ class MainActivity : BaseActivity() {
         needLocation = true
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loginCheck()
         setupView()
         initToolBar()
     }
 
     override fun onResume() {
         super.onResume()
-        if (!UserPref.isUserLogin(this)) {
-            gotoLoginActivity()
-        }
+        loginCheck()
     }
 
     private fun initToolBar() {
@@ -48,7 +45,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun startPostActivity() {
-        val intent = Intent(this,PostActivity::class.java)
+        val intent = Intent(this, PostActivity::class.java)
         startActivity(intent)
     }
 
@@ -58,23 +55,15 @@ class MainActivity : BaseActivity() {
 
     /*检查登录态是否过期*/
     private fun loginCheck() {
-
+        /**
+         * 登录检测还是放在后台校验
+         */
     }
 
     private fun setupView() {
 
         setupBottomBarFragments()
         registeBottomBarCallBacks()
-    }
-
-    fun showProgressBar(){
-        progress_bar.visibility = View.VISIBLE
-        progress_bar.show()
-    }
-
-    fun hideProgressBar(){
-        progress_bar.visibility = View.GONE
-        progress_bar.hide()
     }
 
     private fun registeBottomBarCallBacks() {
@@ -109,6 +98,7 @@ class MainActivity : BaseActivity() {
         transAction.show(mMineFragment)
         transAction.commitAllowingStateLoss()
         activity_main_title.text = "我的"
+        mMineFragment.load()
 
     }
 
