@@ -18,6 +18,9 @@ import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.LoadingView
+import com.lcodecore.tkrefreshlayout.header.SinaRefreshView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -51,6 +54,8 @@ open class SqureFragment : BaseFragment() {
 
     protected fun setupView(view: View?) {
         refreshView = view?.findViewById(R.id.fragment_squre_recycler_view_refresh) as TwinklingRefreshLayout
+        refreshView?.setHeaderView(ProgressLayout(context))
+//        refreshView?.setBottomView(LoadingView(context))
         initRefreshLayout(refreshView!!)
         var recyclerView = view?.findViewById(R.id.fragment_squre_recycler_view) as RecyclerView
         nomoreView = view?.findViewById(R.id.fragment_squre_no_more_view) as TextView
