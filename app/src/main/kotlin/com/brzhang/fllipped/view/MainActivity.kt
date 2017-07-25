@@ -2,32 +2,51 @@ package com.brzhang.fllipped.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.view.View
-import android.widget.Toast
+import android.view.MenuItem
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.pref.UserPref
-import kotlinx.android.synthetic.main.activity_main.*
-import android.R.menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import kotlinx.android.synthetic.main.content_main.*
 
-
-/*因为底部有tab栏，因此没有继承至FlippedBaseActivity ，而是直接继承至BaseActivity*/
-class MainActivity : BaseActivity() {
-
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     val TAG = "MainActivity"
 
     val mSqureFragment = SqureFragment.newInstance()
     val mMineFragment = MineFragment.newInstance()
+
+    override fun handleRxEvent(event: Any?) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         needLocation = true
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupView()
-        initToolBar()
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
+//        val fab = findViewById(R.id.fab) as FloatingActionButton
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
+
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.setDrawerListener(toggle)
+        toggle.syncState()
+
+        val navigationView = findViewById(R.id.nav_view) as NavigationView
+        navigationView.setNavigationItemSelectedListener(this)
     }
 
     override fun onResume() {
@@ -35,8 +54,57 @@ class MainActivity : BaseActivity() {
         loginCheck()
     }
 
-    private fun initToolBar() {
+    override fun onBackPressed() {
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        val id = item.itemId
+
+        if (id == R.id.nav_feed_back) {
+            if (UserPref.isUserLogin(applicationContext)){
+                ReportActivity.startReport(this)
+            }else{
+                gotoLoginActivity()
+            }
+        } else if (id == R.id.nav_quite) {
+            if (UserPref.isUserLogin(applicationContext)){
+                confirmLoginout()
+            }else{
+                toast("当前并没有登录")
+            }
+        }
+
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun confirmLoginout() {
+        MaterialDialog.Builder(this)
+                .theme(Theme.DARK)
+                .title("确认退出登录")
+                .positiveText("确认")
+                .neutralText("取消")
+                .onPositive { dialog, which ->
+                    // TODO
+                    UserPref.setUserLogin(applicationContext, false)
+                    UserPref.setUserName(applicationContext, "")
+                    gotoLoginActivity()
+                }
+                .onNeutral { dialog, which ->
+                }
+                .onNegative { dialog, which ->
+                }
+                .onAny { dialog, which ->
+                }
+                .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,20 +114,21 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId){
+        when (item?.itemId) {
             R.id.op_add -> {
-                startPostActivity()
+                if (UserPref.isUserLogin(applicationContext)){
+                    startPostActivity()
+                }else{
+                    gotoLoginActivity()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
+
     private fun startPostActivity() {
         val intent = Intent(this, PostActivity::class.java)
         startActivity(intent)
-    }
-
-    fun showNavigationBack() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     /*检查登录态是否过期*/
@@ -99,6 +168,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+        title = "广场"
     }
 
     private fun showMineFragment() {
@@ -106,7 +176,7 @@ class MainActivity : BaseActivity() {
         transAction.hide(mSqureFragment)
         transAction.show(mMineFragment)
         transAction.commitAllowingStateLoss()
-//        activity_main_title.text = "我的"
+        title = "我的"
         mMineFragment.load()
 
     }
@@ -116,7 +186,7 @@ class MainActivity : BaseActivity() {
         transAction.show(mSqureFragment)
         transAction.hide(mMineFragment)
         transAction.commitAllowingStateLoss()
-//        activity_main_title.text = "广场"
+        title = "广场"
     }
 
     private fun setupBottomBarFragments() {
@@ -125,11 +195,5 @@ class MainActivity : BaseActivity() {
         transAction.add(R.id.activity_main_fragment_container, mMineFragment)
         transAction.show(mSqureFragment)
         transAction.commitAllowingStateLoss()
-    }
-
-    /***
-     * 这里可以处理总线事件
-     */
-    override fun handleRxEvent(event: Any?) {
     }
 }

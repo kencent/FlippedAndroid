@@ -1,5 +1,7 @@
 package com.brzhang.fllipped.view
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.widget.EditText
 import com.brzhang.fllipped.R
@@ -53,19 +55,23 @@ class ReportActivity : FlippedBaseActivity() {
                 .subscribe(object : Subscriber<ResponseBody>() {
                     override fun onNext(t: ResponseBody?) {
                         toast("反馈成功，感谢~~")
-                        finish()
                     }
 
                     override fun onCompleted() {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                        finish()
                     }
 
                     override fun onError(e: Throwable?) {
-                        toast("反馈失败，请重试")
                     }
                 })
     }
 
+    companion object {
+        fun startReport(context: Context){
+            val intent = Intent(context,ReportActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
 
 }

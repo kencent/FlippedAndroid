@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.api.FllippedService
 import com.brzhang.fllipped.api.RetrofitClient
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_flipped_base.*
 
 /**
  *

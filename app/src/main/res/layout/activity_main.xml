@@ -1,40 +1,26 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <RelativeLayout
-        android:id="@+id/myScrollingContent"
+    <include
+        layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <!-- Your loooooong scrolling content here. -->
-        <FrameLayout
-            android:id="@+id/activity_main_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:itemTextColor="@color/textColorTertiary"
+        app:menu="@menu/activity_main_drawer" />
 
-    </RelativeLayout>
-
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:bb_activeTabColor="@color/colorAccent"
-        app:bb_behavior="shy"
-        app:bb_inActiveTabColor="@color/colorPrimaryDark"
-        app:bb_tabXmlResource="@xml/bottombar" />
-
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/progress_bar"
-        style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:indicatorColor="@color/colorAccent"
-        app:indicatorName="BallClipRotatePulseIndicator" />
-
-</android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.DrawerLayout>

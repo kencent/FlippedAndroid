@@ -21,7 +21,7 @@
     <EditText
         android:id="@+id/flipped_post_activity_et_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/flipped_layout_content_border"
         android:hint="@string/prompt_post_activity_phone"
@@ -30,7 +30,8 @@
         android:padding="5dp"
         android:textColor="@color/text_color_h2"
         android:textColorHint="@color/textColorTertiary"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/text_size_l" />
 
     <EditText
         android:id="@+id/flipped_post_activity_et_words"
@@ -45,7 +46,8 @@
         android:padding="5dp"
         android:textColor="@color/text_color_h2"
         android:textColorHint="@color/textColorTertiary"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/text_size_l" />
 
     <RelativeLayout
         android:id="@+id/activity_post_add_image_rl"
@@ -72,6 +74,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
+            android:textSize="@dimen/text_size_l"
             android:text="添加图片" />
 
         <ImageView
