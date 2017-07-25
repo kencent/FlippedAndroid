@@ -1,13 +1,13 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/activity_main_title"
@@ -17,7 +17,7 @@
             android:layout_gravity="center"
             android:text="@string/activity_main_default_title"
             android:textColor="@color/color_white"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/activity_main_right_button"
@@ -25,8 +25,8 @@
             android:layout_height="30dp"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
-            android:src="@drawable/flipped_ic_add"
-        />
+            android:src="@drawable/flipped_ic_add" />
+
         <TextView
             android:id="@+id/right_text"
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_marginRight="8dp"
             android:text="发布"
             android:textSize="@dimen/text_size_l"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -49,11 +49,7 @@
         <FrameLayout
             android:id="@+id/activity_main_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
-        >
-
-        </FrameLayout>
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
@@ -62,11 +58,11 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
-        app:bb_behavior="shy"
         android:background="@color/colorPrimary"
         app:bb_activeTabColor="@color/colorAccent"
+        app:bb_behavior="shy"
         app:bb_inActiveTabColor="@color/colorPrimaryDark"
-        app:bb_tabXmlResource="@xml/bottombar"/>
+        app:bb_tabXmlResource="@xml/bottombar" />
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/progress_bar"
@@ -76,7 +72,6 @@
         android:layout_gravity="center"
         android:visibility="gone"
         app:indicatorColor="@color/colorAccent"
-        app:indicatorName="BallClipRotatePulseIndicator"
-    />
+        app:indicatorName="BallClipRotatePulseIndicator" />
 
 </android.support.design.widget.CoordinatorLayout>

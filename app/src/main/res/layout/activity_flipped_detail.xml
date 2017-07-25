@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="30dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
     tools:context=".view.DetailActivity">
+
     <TextView
         android:id="@+id/flipped_detail_tv_send_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        tools:text="发送给：18681446372"
-    />
+        android:textColor="@color/textColorSecondary"
+        tools:text="发送给：18681446372" />
+
     <TextView
         android:id="@+id/flipped_detail_text"
         android:layout_width="match_parent"
@@ -24,21 +25,24 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text=""
         android:textSize="@dimen/text_size_xl"
-        tools:text="交分解为我啊放假哦我就爱非叫我我我叫阿佛我瓦尔平均分完"/>
+        android:textColor="@color/textColorPrimary"
+        tools:text="交分解为我啊放假哦我就爱非叫我我我叫阿佛我瓦尔平均分完" />
+
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/flipped_detail_audio"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:useDefaultControls="true"/>
+        app:useDefaultControls="true" />
+
     <ImageView
         android:id="@+id/flipped_detail_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-    />
+        android:layout_marginTop="@dimen/activity_horizontal_margin" />
+
     <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/flipped_detail_video"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:useDefaultControls="true"/>
+        app:useDefaultControls="true" />
 </LinearLayout>

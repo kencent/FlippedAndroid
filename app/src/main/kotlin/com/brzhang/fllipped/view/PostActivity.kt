@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.brzhang.fllipped.HttpUtils
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.SignResponse
@@ -171,6 +172,7 @@ class PostActivity : FlippedBaseActivity() {
 
     private fun showDeleteSelectedImage() {
         MaterialDialog.Builder(this)
+                .theme(Theme.DARK)
                 .title("确认删除图片")
                 .positiveText("确认")
                 .neutralText("取消")
