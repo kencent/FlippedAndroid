@@ -28,8 +28,8 @@
         android:inputType="phone"
         android:maxLines="1"
         android:padding="5dp"
-        android:textCursorDrawable="@null"
-        android:textColorHint="@color/textColorTertiary" />
+        android:textColorHint="@color/textColorTertiary"
+        android:textCursorDrawable="@null" />
 
     <EditText
         android:id="@+id/flipped_post_activity_et_words"
@@ -42,8 +42,8 @@
         android:inputType="textMultiLine"
         android:maxLines="5"
         android:padding="5dp"
-        android:textCursorDrawable="@null"
-        android:textColorHint="@color/textColorTertiary" />
+        android:textColorHint="@color/textColorTertiary"
+        android:textCursorDrawable="@null" />
 
     <RelativeLayout
         android:id="@+id/activity_post_add_image_rl"
