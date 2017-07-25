@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -92,10 +94,6 @@ class PostActivity : FlippedBaseActivity() {
 
     override fun setupView(view: View) {
         showNavigationBack()
-        setActTitle(resources.getString(R.string.activity_post_title))
-        showRigthText("发布", View.OnClickListener {
-            postFlipped()
-        })
         mPhone = flipped_post_activity_et_phone
         mText = flipped_post_activity_et_words
         mImageRl = activity_post_add_image_rl
@@ -112,6 +110,21 @@ class PostActivity : FlippedBaseActivity() {
         mAudioRl?.setOnClickListener({
             selectAudio()
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_post, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.op_post -> {
+                postFlipped()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun selectAudio() {

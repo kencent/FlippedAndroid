@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#FFC6470B</color>
     <color name="colorAccent">#FFFFFFFF</color>
 
-    <color name="textColorPrimary">#FF333333</color>
+    <color name="textColorPrimary">#FFFFFFFF</color>
     <color name="textColorSecondary">#C3C3C3</color>
     <color name="textColorTertiary">#8f8f8f</color>
 
@@ -12,7 +12,7 @@
 
     <color name="text_color_h1">#000000</color>
     <color name="text_color_tag">#dcdcdc</color>
-    <color name="text_color_h2">#8f8f8f</color>
+    <color name="text_color_h2">#ff333333</color>
     <color name="color_divider">#f5f5f5</color>
     <color name="color_white">#ffffff</color>
     <color name="color_page_background">#f5f5f5</color>

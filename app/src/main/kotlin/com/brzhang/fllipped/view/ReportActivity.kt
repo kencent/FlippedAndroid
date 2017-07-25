@@ -36,8 +36,6 @@ class ReportActivity : FlippedBaseActivity() {
             doReport()
         }
         showNavigationBack()
-        hideRight()
-        setActTitle("反馈")
     }
 
     private fun doReport() {

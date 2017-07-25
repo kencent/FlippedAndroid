@@ -28,6 +28,7 @@
         android:inputType="phone"
         android:maxLines="1"
         android:padding="5dp"
+        android:textColor="@color/text_color_h2"
         android:textColorHint="@color/textColorTertiary"
         android:textCursorDrawable="@null" />
 
@@ -42,6 +43,7 @@
         android:inputType="textMultiLine"
         android:maxLines="5"
         android:padding="5dp"
+        android:textColor="@color/text_color_h2"
         android:textColorHint="@color/textColorTertiary"
         android:textCursorDrawable="@null" />
 

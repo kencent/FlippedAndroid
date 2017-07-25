@@ -3,11 +3,16 @@ package com.brzhang.fllipped.view
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.pref.UserPref
 import kotlinx.android.synthetic.main.activity_main.*
+import android.R.menu
+import android.view.MenuInflater
+import android.view.MenuItem
+
 
 /*因为底部有tab栏，因此没有继承至FlippedBaseActivity ，而是直接继承至BaseActivity*/
 class MainActivity : BaseActivity() {
@@ -32,18 +37,22 @@ class MainActivity : BaseActivity() {
 
     private fun initToolBar() {
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbar.setNavigationOnClickListener({
-            finish()
-        })
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = ""
-        //showNavigationBack()
-        activity_main_right_button.setOnClickListener({
-            startPostActivity()
-        })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.op_add -> {
+                startPostActivity()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
     private fun startPostActivity() {
         val intent = Intent(this, PostActivity::class.java)
         startActivity(intent)
@@ -97,7 +106,7 @@ class MainActivity : BaseActivity() {
         transAction.hide(mSqureFragment)
         transAction.show(mMineFragment)
         transAction.commitAllowingStateLoss()
-        activity_main_title.text = "我的"
+//        activity_main_title.text = "我的"
         mMineFragment.load()
 
     }
@@ -107,7 +116,7 @@ class MainActivity : BaseActivity() {
         transAction.show(mSqureFragment)
         transAction.hide(mMineFragment)
         transAction.commitAllowingStateLoss()
-        activity_main_title.text = "广场"
+//        activity_main_title.text = "广场"
     }
 
     private fun setupBottomBarFragments() {

@@ -66,8 +66,6 @@ class DetailActivity : FlippedBaseActivity() ,OnPreparedListener{
 
         mVideo?.setOnPreparedListener(this)
         showNavigationBack()
-        hideRight()
-        setActTitle("详情")
     }
 
     override fun onPrepared() {

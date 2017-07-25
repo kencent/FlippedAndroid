@@ -25,7 +25,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text=""
         android:textSize="@dimen/text_size_xl"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="@color/text_color_h2"
         tools:text="交分解为我啊放假哦我就爱非叫我我我叫阿佛我瓦尔平均分完" />
 
     <com.devbrackets.android.exomedia.ui.widget.VideoView

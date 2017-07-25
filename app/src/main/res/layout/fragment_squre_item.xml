@@ -15,7 +15,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textSize="@dimen/text_size_xl"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="@color/text_color_h2"
         tools:text="我发表了一条心情,我发我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情表了一条心情我发表了一条心情我发表了一条心情"
     />
 

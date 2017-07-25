@@ -3,52 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        app:theme="@style/ToolbarColoredBackArrow"
-        android:layout_height="?attr/actionBarSize">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="文字居中"
-            android:textColor="@color/color_white"
-            android:textSize="20sp"/>
-
-        <ImageView
-            android:id="@+id/right_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="8dp"
-            android:visibility="visible"
-            android:src="@drawable/flipped_ic_add"
-        />
-        <TextView
-            android:id="@+id/right_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:textColor="@color/color_white"
-            android:text="发布"
-            android:textSize="@dimen/text_size_l"
-            android:visibility="gone"/>
-
-    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/activity_base_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
+        android:layout_height="match_parent">
         <!-- Your loooooong scrolling content here. -->
 
     </android.support.v4.widget.NestedScrollView>

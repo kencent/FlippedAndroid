@@ -32,9 +32,7 @@ class LoginActivity : FlippedBaseActivity(), View.OnClickListener {
     }
 
     override fun setupView(view: View) {
-        hideRight()
         showNavigationBack()
-        setActTitle("登录")
 
         flipped_login_tv_about.setOnClickListener(this)
         flipped_login_bt_get_very_code.setOnClickListener(this)
