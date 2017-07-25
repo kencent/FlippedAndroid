@@ -216,6 +216,7 @@ class PostActivity : FlippedBaseActivity() {
                     .flatMap { t: String? ->
                         var flippedWord = Flippedword()
                         flippedWord.sendto = mPhone?.text.toString()
+                        fillLatLng(flippedWord)
                         val contentText = Content()
                         contentText.type = Content.Type.TEXT.type
                         contentText.text = mText?.text.toString()
@@ -246,6 +247,7 @@ class PostActivity : FlippedBaseActivity() {
         } else {
             var flippedWord = Flippedword()
             flippedWord.sendto = mPhone?.text.toString()
+            fillLatLng(flippedWord)
             val contentText = Content()
             contentText.type = Content.Type.TEXT.type
             contentText.text = mText?.text.toString()
@@ -272,6 +274,13 @@ class PostActivity : FlippedBaseActivity() {
                     }))
         }
 
+    }
+
+    private fun fillLatLng(flippedWord: Flippedword) {
+        if (UserPref.getUserLocation(applicationContext) != null){
+            flippedWord.lat = UserPref.getUserLocation(applicationContext)?.lat
+            flippedWord.lng = UserPref.getUserLocation(applicationContext)?.lng
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
