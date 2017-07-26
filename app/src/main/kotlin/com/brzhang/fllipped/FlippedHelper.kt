@@ -76,6 +76,8 @@ object FlippedHelper {
         var distance = flippedword?.distance ?: 0
         if (distance > 1000) {
             return String.format("%.1fkm", distance / 1000.0)
+        } else if (distance == 0L) {
+            return ""
         } else {
             return "${distance}m"
         }

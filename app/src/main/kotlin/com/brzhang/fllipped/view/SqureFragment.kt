@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -101,11 +103,19 @@ open class SqureFragment : BaseFragment() {
     }
 
     protected open fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
-        holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(flippedword)}"
+        if (TextUtils.isEmpty(FlippedHelper.getDistance(flippedword))) {
+            holder.flippedDistance.visibility = View.GONE
+            holder.flippedDistanceDivider.visibility = View.GONE
+        } else {
+            holder.flippedDistanceDivider.visibility = View.VISIBLE
+            holder.flippedDistance.visibility = View.VISIBLE
+            holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(flippedword)}"
+        }
+
     }
 
     open fun askFlippedList() {
-        LogUtil.dLoge("hoolly","squre fragment load data")
+        LogUtil.dLoge("hoolly", "squre fragment load data")
         var params = HashMap<String, Double>()
         val latLng = UserPref.getUserLocation(activity)
         if (latLng != null) {
@@ -229,6 +239,7 @@ open class SqureFragment : BaseFragment() {
         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView
         val flippedDistance: TextView = itemView.findViewById(R.id.flipped_item_tv_send_distance) as TextView
+        val flippedDistanceDivider: ImageView = itemView.findViewById(R.id.flipped_item_iv_divider) as ImageView
         val tagPic: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_pic) as ImageView
         val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
         val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView

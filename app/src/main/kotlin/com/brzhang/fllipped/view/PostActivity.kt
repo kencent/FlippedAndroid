@@ -15,9 +15,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.brzhang.fllipped.HttpUtils
 import com.brzhang.fllipped.R
-import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.Content
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.model.SignResponse
 import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.brzhang.fllipped.utils.UploadUtils

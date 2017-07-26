@@ -1,8 +1,8 @@
 package com.brzhang.fllipped.api
 
-import com.brzhang.fllipped.SignResponse
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
+import com.brzhang.fllipped.model.SignResponse
 import com.brzhang.fllipped.model.VeryCodeResponse
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -39,7 +39,6 @@ interface FllippedService {
 
     @GET("youtusig")
     fun getSign(): Observable<SignResponse>
-
 
     @GET("help")
     fun getHelp(): Observable<Flippedword>
