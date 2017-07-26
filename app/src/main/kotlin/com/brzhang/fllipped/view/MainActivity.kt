@@ -79,6 +79,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }else{
                 toast("当前并没有登录")
             }
+        }else if(id == R.id.nav_help){
+            AboutActivity.startMe(this)
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout

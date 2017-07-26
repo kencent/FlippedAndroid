@@ -55,7 +55,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.AboutActivity"
-            android:label="关于"
+            android:label="帮助"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.ReportActivity"
@@ -70,6 +70,16 @@
             android:name=".view.MainActivity"
             android:label="@string/title_activity_new_main"
             android:theme="@style/AppTheme.NoActionBar">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".view.SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
