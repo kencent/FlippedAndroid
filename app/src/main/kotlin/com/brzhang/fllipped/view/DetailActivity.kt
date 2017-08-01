@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
@@ -17,13 +18,18 @@ import kotlinx.android.synthetic.main.activity_flipped_detail.*
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import com.afollestad.materialdialogs.MaterialDialog
+import android.R.id.input
+import com.brzhang.fllipped.model.Comment
+import com.brzhang.fllipped.model.Content
+
 
 /**
  *
  * Created by brzhang on 2017/7/9.
  * Description :
  */
-class DetailActivity : FlippedBaseActivity() ,OnPreparedListener{
+class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
 
     private var mFlippedId = ""
 
@@ -46,6 +52,7 @@ class DetailActivity : FlippedBaseActivity() ,OnPreparedListener{
 
     private var mVideo: VideoView? = null
 
+    private var mLlComment: RelativeLayout? = null
 
     override fun handleRxEvent(event: Any?) {
     }
@@ -57,15 +64,52 @@ class DetailActivity : FlippedBaseActivity() ,OnPreparedListener{
     override fun onOptionHomeClick() {
         this.finish()
     }
+
+
     override fun setupView(view: View) {
         msendTo = flipped_detail_tv_send_to
         mtext = flipped_detail_text
         mAudio = flipped_detail_audio
         mImage = flipped_detail_image
         mVideo = flipped_detail_video
-
+        mLlComment = flipped_detail_comment_ll
+        mLlComment?.setOnClickListener({
+            MaterialDialog.Builder(this)
+                    .title("请输入评论内容")
+                    .inputRangeRes(1, 90, R.color.colorPrimaryDark)
+                    .input(null, null, MaterialDialog.InputCallback { dialog, input ->
+                        // Do something
+                        var comment = Comment()
+                        var content = Content()
+                        content.text = input.toString()
+                        content.type = Content.Type.TEXT.type
+                        comment.contents = arrayListOf(content)
+                        postComment(comment)
+                    }).show()
+        })
         mVideo?.setOnPreparedListener(this)
         showNavigationBack()
+    }
+
+    private fun postComment(comment: Comment) {
+        showProgressBar()
+        fllippedNetService().comment(mFlippedId, comment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<Comment>() {
+                    override fun onNext(t: Comment?) {
+                        toast("评论成功")
+                    }
+
+                    override fun onCompleted() {
+                        hideProgressBar()
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        toast(e?.message ?: "评论失败")
+                        hideProgressBar()
+                    }
+                })
     }
 
     override fun onPrepared() {

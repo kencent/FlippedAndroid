@@ -1,9 +1,6 @@
 package com.brzhang.fllipped.api
 
-import com.brzhang.fllipped.model.FlippedsResponse
-import com.brzhang.fllipped.model.Flippedword
-import com.brzhang.fllipped.model.SignResponse
-import com.brzhang.fllipped.model.VeryCodeResponse
+import com.brzhang.fllipped.model.*
 import okhttp3.ResponseBody
 import retrofit2.http.*
 import rx.Observable
@@ -35,7 +32,7 @@ interface FllippedService {
     fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
 
     @GET("flippedwords/{id}")
-    fun getFlippedDetail(@Path("id") flippedId:String):Observable<Flippedword>
+    fun getFlippedDetail(@Path("id") flippedId: String): Observable<Flippedword>
 
     @GET("youtusig")
     fun getSign(): Observable<SignResponse>
@@ -44,6 +41,15 @@ interface FllippedService {
     fun getHelp(): Observable<Flippedword>
 
     @POST("feedbacks")
-    fun feedbacks(@Body flippedword: Flippedword):Observable<ResponseBody>
+    fun feedbacks(@Body flippedword: Flippedword): Observable<ResponseBody>
+
+    @POST("flippedwords/{id}/comments")
+    fun comment(@Path("id") id: String,@Body comment: Comment): Observable<Comment>
+
+    @GET("flippedwords/{id}/comments")
+    fun listComments(@Path("id") id: String): Observable<CommentListResponse>
+
+    @DELETE("flippedwords/{id}/comments/commentid")
+    fun deleteComment(@Path("id") id: String, @Path("commentid") commentid: String)
 
 }
