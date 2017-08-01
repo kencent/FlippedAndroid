@@ -22,6 +22,9 @@ interface FllippedService {
     @POST("flippedwords")
     fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
+    @DELETE("/flippedwords/id")
+    fun deleteFllipped(@Path("id") id: String)
+
     @GET("nearby_flippedwords")
     fun getNearByFlippeds(@QueryMap querys: Map<String, Double>): Observable<FlippedsResponse>
 
@@ -44,7 +47,7 @@ interface FllippedService {
     fun feedbacks(@Body flippedword: Flippedword): Observable<ResponseBody>
 
     @POST("flippedwords/{id}/comments")
-    fun comment(@Path("id") id: String,@Body comment: Comment): Observable<Comment>
+    fun comment(@Path("id") id: String, @Body comment: Comment): Observable<Comment>
 
     @GET("flippedwords/{id}/comments")
     fun listComments(@Path("id") id: String): Observable<CommentListResponse>
