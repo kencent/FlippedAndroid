@@ -7,11 +7,12 @@ import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
@@ -20,9 +21,8 @@ import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import com.lcodecore.tkrefreshlayout.footer.LoadingView
-import com.lcodecore.tkrefreshlayout.header.SinaRefreshView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import okhttp3.ResponseBody
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -111,7 +111,6 @@ open class SqureFragment : BaseFragment() {
             holder.flippedDistance.visibility = View.VISIBLE
             holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(flippedword)}"
         }
-
     }
 
     open fun askFlippedList() {
@@ -223,11 +222,55 @@ open class SqureFragment : BaseFragment() {
                 view ->
                 startDetailActivity(view.tag.toString())
             })
+            val fliipped = fllippeds?.get(position)
+            holder.itemView.setOnLongClickListener({
+                if (canDelete(fliipped)) {
+                    MaterialDialog.Builder(context)
+                            .title("提示")
+                            .content("确认删除该条心动的话？")
+                            .positiveText("确定")
+                            .negativeText("取消")
+                            .onPositive { dialog, which ->
+                                deleteFlippedWords(fliipped)
+                            }
+                            .show()
+                }
+                true
+            })
         }
 
         override fun getItemCount(): Int {
             return if (fllippeds == null) 0 else fllippeds!!.size
         }
+    }
+
+    private fun canDelete(fliipped: Flippedword?): Boolean {
+        if (fliipped?.links == null || fliipped?.links!!.isEmpty()) {
+            return false
+        }
+        return fliipped.links!!.any { it.method.toUpperCase().equals("DELETE") }
+    }
+
+    private fun deleteFlippedWords(fliipped: Flippedword?) {
+        showLoadingView()
+        fllippedNetService().deleteFllipped(fliipped?.id ?: 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<ResponseBody>() {
+                    override fun onCompleted() {
+                        hideLoadingView()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e("hoolly", "error", e)
+                        hideLoadingView()
+                    }
+
+                    override fun onNext(responseBody: ResponseBody) {
+                        //todo 这里处理删除逻辑，移除改条
+                        toast("删除flipped成功")
+                    }
+                })
     }
 
     private fun startDetailActivity(flippedId: String) {

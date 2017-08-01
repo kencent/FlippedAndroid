@@ -23,7 +23,7 @@ interface FllippedService {
     fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
     @DELETE("/flippedwords/id")
-    fun deleteFllipped(@Path("id") id: String)
+    fun deleteFllipped(@Path("id") id: Int):Observable<ResponseBody>
 
     @GET("nearby_flippedwords")
     fun getNearByFlippeds(@QueryMap querys: Map<String, Double>): Observable<FlippedsResponse>
