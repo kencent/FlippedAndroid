@@ -114,7 +114,8 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
                     override fun onNext(t: Comment?) {
                         toast("评论成功")
                         comment.id = t?.id
-                        comment.uid = UserPref.getUserName(applicationContext, "无名小辈")
+                        comment.floor = t?.floor
+                        comment.uid = /*UserPref.getUserName(applicationContext, "无名小辈")*/ "我"
                         adapter?.addComment(comment)
                     }
 
@@ -213,7 +214,8 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         }
 
         override fun onBindViewHolder(holder: CommentViewHolder?, position: Int) {
-            holder?.send?.text = """${comments[position].uid}："""
+            holder?.send?.text = """${comments[position].uid}说："""
+            holder?.floor?.text = """${comments[position].floor}楼"""
             holder?.contentText?.text = comments[position].contents?.get(0)?.text
         }
 
@@ -229,6 +231,7 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
 
     inner class CommentViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         var send: TextView = itemView?.findViewById(R.id.flipped_comment_item_tv_sender) as TextView
+        var floor: TextView = itemView?.findViewById(R.id.flipped_comment_item_tv_floor) as TextView
         var contentText: TextView = itemView?.findViewById(R.id.flipped_comment_item_tv_content_text) as TextView
     }
 

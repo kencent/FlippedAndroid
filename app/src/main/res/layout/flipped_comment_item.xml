@@ -8,24 +8,32 @@
     android:paddingRight="5dp"
     android:paddingTop="8dp">
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/flipped_comment_item_tv_sender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_color_h2"
-            tools:text="135*****32423：" />
+            tools:text="135*****32423 说：" />
 
         <TextView
-            android:id="@+id/flipped_comment_item_tv_content_text"
+            android:id="@+id/flipped_comment_item_tv_floor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="我真的很想你哦激发Joe我我哦啊见覅额积分积分奇偶粉丝\n呵呵" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            tools:text="1楼" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/flipped_comment_item_tv_content_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/text_color_h2"
+        tools:text="我真的很想你哦激发Joe我我哦啊见覅额积分积分奇偶粉丝\n呵呵" />
 
     <ImageView
         android:layout_width="match_parent"
