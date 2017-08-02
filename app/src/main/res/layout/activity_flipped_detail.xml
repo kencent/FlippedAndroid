@@ -52,20 +52,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="全部评论"
-            android:textColor="@color/colorPrimary" />
-
         <ImageView
             android:id="@+id/flipped_detail_iv_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/flipped_detail_tv_comment"
             android:src="@drawable/ic_comment_red_400_18dp" />
+
+        <TextView
+            android:id="@+id/flipped_detail_iv_comment_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/flipped_detail_iv_comment"
+            android:text="全部评论"
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/flipped_detail_tv_comment"
@@ -73,7 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:text="评论" />
+            android:text="评论"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <ImageView

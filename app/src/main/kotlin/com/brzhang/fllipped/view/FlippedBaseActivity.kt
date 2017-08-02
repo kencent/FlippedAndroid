@@ -1,6 +1,8 @@
 package com.brzhang.fllipped.view
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -41,6 +43,11 @@ abstract class FlippedBaseActivity : BaseActivity() {
 //        supportActionBar?.title = ""
 //        showNavigationBack()
 
+    }
+
+    fun showFloatActionButton(onClickListener: View.OnClickListener){
+        float_button.visibility = View.VISIBLE
+        float_button.setOnClickListener(onClickListener)
     }
 
     fun showNavigationBack() {

@@ -85,24 +85,32 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         mLlComment = flipped_detail_comment_ll
         mRecyclerView = flipped_detail_comment_recycler_view
         mLlComment?.setOnClickListener({
-            MaterialDialog.Builder(this)
-                    .title("请输入评论内容")
-                    .inputRangeRes(1, 90, R.color.colorPrimaryDark)
-                    .input(null, null, MaterialDialog.InputCallback { dialog, input ->
-                        // Do something
-                        var comment = Comment()
-                        var content = Content()
-                        content.text = input.toString()
-                        content.type = Content.Type.TEXT.type
-                        comment.contents = arrayListOf(content)
-                        postComment(comment)
-                    }).show()
+            showCommentDialog()
         })
         mVideo?.setOnPreparedListener(this)
         mRecyclerView?.layoutManager = LinearLayoutManager(this)
         adapter = CommentAdapter()
         mRecyclerView?.adapter = adapter
         showNavigationBack()
+        /*显示底部评论按钮*/
+        showFloatActionButton(View.OnClickListener {
+            showCommentDialog()
+        })
+    }
+
+    private fun showCommentDialog() {
+        MaterialDialog.Builder(this)
+                .title("请输入评论内容")
+                .inputRangeRes(1, 90, R.color.colorPrimaryDark)
+                .input(null, null, MaterialDialog.InputCallback { dialog, input ->
+                    // Do something
+                    var comment = Comment()
+                    var content = Content()
+                    content.text = input.toString()
+                    content.type = Content.Type.TEXT.type
+                    comment.contents = arrayListOf(content)
+                    postComment(comment)
+                }).show()
     }
 
     private fun postComment(comment: Comment) {

@@ -1,8 +1,8 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/activity_base_container"
@@ -19,10 +19,20 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:visibility="gone"
-        tools:visibility="visible"
         app:indicatorColor="@color/colorAccent"
         app:indicatorName="BallClipRotatePulseIndicator"
-    />
+        tools:visibility="visible" />
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/float_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/ic_comment_red_400_18dp"
+        android:visibility="gone"
+        app:rippleColor="@color/colorPrimaryDark"
+        tools:visibility="visible" />
 </android.support.design.widget.CoordinatorLayout>
