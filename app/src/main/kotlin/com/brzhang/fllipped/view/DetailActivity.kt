@@ -19,15 +19,16 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import com.afollestad.materialdialogs.MaterialDialog
-import android.R.id.input
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.brzhang.fllipped.model.Comment
 import com.brzhang.fllipped.model.CommentListResponse
 import com.brzhang.fllipped.model.Content
-import com.brzhang.fllipped.pref.UserPref
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 
 /**
@@ -96,6 +97,20 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         showFloatActionButton(View.OnClickListener {
             showCommentDialog()
         })
+        mRecyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                var layoumaner = recyclerView?.layoutManager as LinearLayoutManager
+                if (layoumaner.findLastVisibleItemPosition() == recyclerView?.adapter.itemCount - 1) {
+                    loadMoreComment()
+                }
+            }
+        })
+    }
+
+    private fun loadMoreComment() {
+
+        dToast("加载更多评论数据")
     }
 
     private fun showCommentDialog() {
@@ -221,10 +236,31 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
             notifyItemInserted(itemCount)
         }
 
+        fun deleteComment(comment: Comment) {
+            var i = 0
+            for (com in comments) {
+                if (com.id!!.equals(comment.id)) {
+                    comments.removeAt(i)
+                    notifyItemRemoved(i)
+                    break
+                } else {
+                    i++
+                }
+            }
+            notifyDataSetChanged()
+        }
+
         override fun onBindViewHolder(holder: CommentViewHolder?, position: Int) {
             holder?.send?.text = """${comments[position].uid}说："""
             holder?.floor?.text = """${comments[position].floor}楼"""
             holder?.contentText?.text = comments[position].contents?.get(0)?.text
+            val comment = comments[position]
+            holder?.itemView?.setOnLongClickListener {
+                if (canDeleteComment(comment)) {
+                    showDeleteComment(comment)
+                }
+                true
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CommentViewHolder {
@@ -235,6 +271,48 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
             return comments.size
         }
 
+    }
+
+    private fun showDeleteComment(comment: Comment) {
+        MaterialDialog.Builder(this)
+                .title("提示")
+                .content("确认删除该评论？")
+                .positiveText("确定")
+                .negativeText("取消")
+                .onPositive { dialog, which ->
+                    deleteComment(comment)
+                }
+                .show()
+    }
+
+    private fun deleteComment(comment: Comment) {
+        showProgressBar()
+        fllippedNetService().deleteComment(mFlippedId.toInt(), comment.id ?: 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<Response<Void>>() {
+                    override fun onCompleted() {
+                        hideProgressBar()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e("hoolly", "error", e)
+                        hideProgressBar()
+                    }
+
+                    override fun onNext(responseBody: Response<Void>) {
+                        //todo 这里处理删除逻辑，移除改条
+                        toast("删除评论成功")
+                        adapter?.deleteComment(comment)
+                    }
+                })
+    }
+
+    private fun canDeleteComment(comment: Comment): Boolean {
+        if (comment?.links == null || comment?.links!!.isEmpty()) {
+            return false
+        }
+        return comment.links!!.any { it.method.toUpperCase().equals("DELETE") }
     }
 
     inner class CommentViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {

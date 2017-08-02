@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.brzhang.fllipped.App
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
+import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -45,8 +47,17 @@ class MineReceiveFragment : SqureFragment() {
 
     override fun askFlippedList() {
         LogUtil.dLoge("hoolly","receiver fragment load data")
+        var params = HashMap<String, String>()
+        val latLng = UserPref.getUserLocation(App.ApplicationContext())
+        if (latLng != null) {
+            params.put("lat", latLng?.lat!!.toString())
+            params.put("lng", latLng?.lng!!.toString())
+        }
+        if (mflippedId != null){
+            params.put("id",mflippedId!!.toString())
+        }
         fllippedNetService()
-                .getReceivesFlippedwords(mflippedId)
+                .getReceivesFlippedwords(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<FlippedsResponse>() {
@@ -68,6 +79,11 @@ class MineReceiveFragment : SqureFragment() {
                             showFlippedList(flippesResonse)
                         } else {
                             appendFlippedList(flippesResonse)
+                        }
+                        if (canLoadMore(flippesResonse)){
+                            refreshView?.setEnableLoadmore(true)
+                        }else{
+                            refreshView?.setEnableLoadmore(false)
                         }
                         nomoreView(R.string.no_more_receive)
                         extractMaxFlippedId(flippesResonse)

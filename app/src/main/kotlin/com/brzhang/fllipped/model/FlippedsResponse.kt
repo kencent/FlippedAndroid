@@ -6,5 +6,5 @@ package com.brzhang.fllipped.model
  * Description :
  */
 
-class FlippedsResponse(var flippedwords: List<Flippedword>?, var links: List<Link>?)
+class FlippedsResponse(var flippedwords: ArrayList<Flippedword>?, var links: ArrayList<Link>?)
 

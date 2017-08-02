@@ -75,6 +75,11 @@ class MineSendFragment : SqureFragment() {
                         } else {
                             appendFlippedList(flippesResonse)
                         }
+                        if (canLoadMore(flippesResonse)){
+                            refreshView?.setEnableLoadmore(true)
+                        }else{
+                            refreshView?.setEnableLoadmore(false)
+                        }
                         nomoreView(R.string.no_more_send)
                         mflippedId = flippesResonse.flippedwords?.last()?.id.toString()
                     }

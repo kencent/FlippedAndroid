@@ -2,6 +2,7 @@ package com.brzhang.fllipped.api
 
 import com.brzhang.fllipped.model.*
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 import rx.Observable
 
@@ -23,16 +24,16 @@ interface FllippedService {
     fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
     @DELETE("/flippedwords/id")
-    fun deleteFllipped(@Path("id") id: Int):Observable<ResponseBody>
+    fun deleteFllipped(@Path("id") id: Int): Observable<Response<Void>>
 
     @GET("nearby_flippedwords")
-    fun getNearByFlippeds(@QueryMap querys: Map<String, Double>): Observable<FlippedsResponse>
+    fun getNearByFlippeds(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>
 
     @GET("mypub_flippedwords")
     fun getMypubFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
 
     @GET("my_flippedwords")
-    fun getReceivesFlippedwords(@Query("id") id: String): Observable<FlippedsResponse>
+    fun getReceivesFlippedwords(@QueryMap querys: Map<String, String>): Observable<FlippedsResponse>
 
     @GET("flippedwords/{id}")
     fun getFlippedDetail(@Path("id") flippedId: String): Observable<Flippedword>
@@ -52,7 +53,7 @@ interface FllippedService {
     @GET("flippedwords/{id}/comments")
     fun listComments(@Path("id") id: String): Observable<CommentListResponse>
 
-    @DELETE("flippedwords/{id}/comments/commentid")
-    fun deleteComment(@Path("id") id: String, @Path("commentid") commentid: String)
+    @DELETE("flippedwords/{id}/comments/{commentid}")
+    fun deleteComment(@Path("id") id: Int, @Path("commentid") commentid: Int): Observable<Response<Void>>
 
 }

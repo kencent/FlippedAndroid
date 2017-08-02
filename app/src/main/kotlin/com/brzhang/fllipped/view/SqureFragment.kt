@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
@@ -22,11 +21,11 @@ import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
-import okhttp3.ResponseBody
+import retrofit2.Response
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 /**
  * Created by brzhang on 2017/7/3.
@@ -37,6 +36,8 @@ open class SqureFragment : BaseFragment() {
 
 
     private var mAdapter: SqureFllippedAdapter? = null
+
+    private var mLastFlipedId:Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,7 @@ open class SqureFragment : BaseFragment() {
         return view
     }
 
-    private var refreshView: TwinklingRefreshLayout? = null
+    protected var refreshView: TwinklingRefreshLayout? = null
 
     private var nomoreView: TextView? = null
 
@@ -93,12 +94,18 @@ open class SqureFragment : BaseFragment() {
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
                 super.onLoadMore(refreshLayout)
+                loadMore()
             }
         })
 
     }
 
+    protected fun loadMore(){
+        askFlippedList()
+    }
+
     protected fun askData() {
+        mLastFlipedId = null
         askFlippedList()
     }
 
@@ -115,11 +122,14 @@ open class SqureFragment : BaseFragment() {
 
     open fun askFlippedList() {
         LogUtil.dLoge("hoolly", "squre fragment load data")
-        var params = HashMap<String, Double>()
+        var params = HashMap<String, String>()
         val latLng = UserPref.getUserLocation(activity)
         if (latLng != null) {
-            params.put("lat", latLng?.lat!!)
-            params.put("lng", latLng?.lng!!)
+            params.put("lat", latLng?.lat!!.toString())
+            params.put("lng", latLng?.lng!!.toString())
+        }
+        if (mLastFlipedId != null){
+            params.put("id",mLastFlipedId!!.toString())
         }
         fllippedNetService()
                 .getNearByFlippeds(params)
@@ -136,18 +146,47 @@ open class SqureFragment : BaseFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        showFlippedList(flippesResonse)
+                        if (mLastFlipedId == null){
+                            showFlippedList(flippesResonse)
+                        }else{
+                            showMoreFlippedList(flippesResonse)
+                        }
                     }
                 })
     }
 
+    private fun showMoreFlippedList(flippesResonse: FlippedsResponse) {
+        if (flippesResonse.flippedwords != null){
+            mAdapter?.fllippeds?.addAll(flippesResonse.flippedwords!!)
+            mAdapter?.notifyDataSetChanged()
+            if (flippesResonse.links!=null && canLoadMore(flippesResonse)){
+                refreshView?.setEnableLoadmore(true)
+            }else{
+                refreshView?.setEnableLoadmore(false)
+            }
+            mLastFlipedId = flippesResonse.flippedwords!!.last().id
+        }
+    }
+
     fun showFlippedList(fllippesResonse: FlippedsResponse) {
-        mAdapter?.fllippeds = fllippesResonse.flippedwords
-        mAdapter?.notifyDataSetChanged()
+        if (fllippesResonse.flippedwords != null){
+            mAdapter?.fllippeds = fllippesResonse.flippedwords
+            mAdapter?.notifyDataSetChanged()
+            if (fllippesResonse.links!=null && canLoadMore(fllippesResonse)){
+                refreshView?.setEnableLoadmore(true)
+            }else{
+                refreshView?.setEnableLoadmore(false)
+            }
+            mLastFlipedId = fllippesResonse.flippedwords!!.last().id
+        }
+    }
+
+    protected fun canLoadMore(fllippesResonse: FlippedsResponse): Boolean {
+        return fllippesResonse.links!!.any { it.uri.toUpperCase() == "NEXT" }
     }
 
     fun appendFlippedList(flippesResonse: FlippedsResponse) {
-        var list = mutableListOf<Flippedword>()
+        var list = arrayListOf<Flippedword>()
         list.addAll(mAdapter?.fllippeds!!)
         list.addAll(flippesResonse.flippedwords!!)
         mAdapter?.fllippeds = list
@@ -191,7 +230,8 @@ open class SqureFragment : BaseFragment() {
     private inner class SqureFllippedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 
-        var fllippeds: List<Flippedword>? = ArrayList()
+        var fllippeds: ArrayList<Flippedword>? = arrayListOf()
+
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_squre_item, parent, false)
@@ -242,13 +282,30 @@ open class SqureFragment : BaseFragment() {
         override fun getItemCount(): Int {
             return if (fllippeds == null) 0 else fllippeds!!.size
         }
+
+        fun deleteFlippedword(fliipped: Flippedword?) {
+            if (fllippeds == null) {
+                return
+            }
+            var i = 0
+            for (fli in fllippeds!!) {
+                if (fli.id!!.equals(fliipped!!.id)) {
+                    fllippeds!!.removeAt(i)
+                    notifyItemRemoved(i)
+                    break
+                } else {
+                    i++
+                }
+            }
+            notifyDataSetChanged()
+        }
     }
 
     private fun canDelete(fliipped: Flippedword?): Boolean {
         if (fliipped?.links == null || fliipped?.links!!.isEmpty()) {
             return false
         }
-        return fliipped.links!!.any { it.method.toUpperCase().equals("DELETE") }
+        return fliipped.links!!.any { it.rel.toUpperCase() == "DELETE" }
     }
 
     private fun deleteFlippedWords(fliipped: Flippedword?) {
@@ -256,7 +313,7 @@ open class SqureFragment : BaseFragment() {
         fllippedNetService().deleteFllipped(fliipped?.id ?: 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<ResponseBody>() {
+                .subscribe(object : Subscriber<Response<Void>>() {
                     override fun onCompleted() {
                         hideLoadingView()
                     }
@@ -266,9 +323,10 @@ open class SqureFragment : BaseFragment() {
                         hideLoadingView()
                     }
 
-                    override fun onNext(responseBody: ResponseBody) {
+                    override fun onNext(responseBody: Response<Void>) {
                         //todo 这里处理删除逻辑，移除改条
                         toast("删除flipped成功")
+                        mAdapter?.deleteFlippedword(fliipped)
                     }
                 })
     }
