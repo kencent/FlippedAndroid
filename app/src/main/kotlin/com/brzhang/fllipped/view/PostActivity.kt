@@ -73,7 +73,7 @@ class PostActivity : FlippedBaseActivity() {
     private fun showNeedLoginDialog() {
 
         MaterialDialog.Builder(this)
-                .title("发布心痛的话需要您先登录")
+                .title("发布心动的话需要您先登录")
                 .positiveText("去登录")
                 .neutralText("取消")
                 .onPositive { _, _ ->
@@ -119,7 +119,7 @@ class PostActivity : FlippedBaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId){
+        when (item?.itemId) {
             R.id.op_post -> {
                 postFlipped()
             }
@@ -292,7 +292,7 @@ class PostActivity : FlippedBaseActivity() {
     }
 
     private fun fillLatLng(flippedWord: Flippedword) {
-        if (UserPref.getUserLocation(applicationContext) != null){
+        if (UserPref.getUserLocation(applicationContext) != null) {
             flippedWord.lat = UserPref.getUserLocation(applicationContext)?.lat
             flippedWord.lng = UserPref.getUserLocation(applicationContext)?.lng
         }

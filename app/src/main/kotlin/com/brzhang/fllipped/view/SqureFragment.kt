@@ -19,6 +19,7 @@ import com.brzhang.fllipped.busevent.DeleteFlipped
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.pref.UserPref
+import com.brzhang.fllipped.utils.CopyUtils
 import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -278,17 +279,19 @@ open class SqureFragment : BaseFragment() {
             })
             val fliipped = fllippeds?.get(position)
             holder.itemView.setOnLongClickListener({
-                if (FlippedHelper.canDelete(fliipped)) {
-                    MaterialDialog.Builder(context)
-                            .title("提示")
-                            .content("确认删除该条心动的话？")
-                            .positiveText("确定")
-                            .negativeText("取消")
-                            .onPositive { dialog, which ->
-                                deleteFlippedWords(fliipped)
-                            }
-                            .show()
-                }
+                //                if (FlippedHelper.canDelete(fliipped)) {
+//                    MaterialDialog.Builder(context)
+//                            .title("提示")
+//                            .content("确认删除该条心动的话？")
+//                            .positiveText("确定")
+//                            .negativeText("取消")
+//                            .onPositive { dialog, which ->
+//                                deleteFlippedWords(fliipped)
+//                            }
+//                            .show()
+//                }
+                CopyUtils.copyText(context, FlippedHelper.getText(fliipped))
+                toast("内容已复制")
                 true
             })
         }
