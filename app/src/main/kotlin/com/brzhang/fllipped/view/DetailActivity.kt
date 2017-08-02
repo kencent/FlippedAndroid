@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -22,11 +21,13 @@ import com.afollestad.materialdialogs.MaterialDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
+import com.brzhang.fllipped.RxBus
+import com.brzhang.fllipped.busevent.DeleteFlipped
 import com.brzhang.fllipped.model.Comment
 import com.brzhang.fllipped.model.CommentListResponse
 import com.brzhang.fllipped.model.Content
+import com.brzhang.fllipped.pref.UserPref
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -39,6 +40,7 @@ import retrofit2.Response
 class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
 
     private var mFlippedId = ""
+    private var mFlipped: Flippedword? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +78,60 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         this.finish()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_detail, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (!FlippedHelper.canDelete(mFlipped)) {
+            menu?.findItem(R.id.op_delete)?.isVisible = false
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.op_delete -> {
+                if (FlippedHelper.canDelete(mFlipped)) {
+                    MaterialDialog.Builder(this)
+                            .title("提示")
+                            .content("确认删除该条心动的话？")
+                            .positiveText("确定")
+                            .negativeText("取消")
+                            .onPositive { dialog, which ->
+                                deleteFlippedWords(mFlipped)
+                            }
+                            .show()
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteFlippedWords(fliipped: Flippedword?) {
+        showProgressBar()
+        fllippedNetService().deleteFllipped(fliipped?.id ?: 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<Response<Void>>() {
+                    override fun onCompleted() {
+                        hideProgressBar()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e("hoolly", "error", e)
+                        hideProgressBar()
+                    }
+
+                    override fun onNext(responseBody: Response<Void>) {
+                        toast("删除成功")
+                        RxBus.getRxBusSingleton().send(DeleteFlipped(fliipped!!))
+                        finish()
+                    }
+                })
+    }
 
     override fun setupView(view: View) {
         msendTo = flipped_detail_tv_send_to
@@ -200,6 +256,8 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
     }
 
     private fun showFlippedDetail(t: Flippedword?) {
+        mFlipped = t
+        supportInvalidateOptionsMenu()
         msendTo?.text = "发送给：${t?.sendto}"
         if (FlippedHelper.getText(t).isBlank()) {
             mtext?.visibility = View.GONE

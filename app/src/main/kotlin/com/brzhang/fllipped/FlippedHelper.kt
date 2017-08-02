@@ -100,4 +100,11 @@ object FlippedHelper {
         }
     }
 
+    fun canDelete(fliipped: Flippedword?): Boolean {
+        if (fliipped?.links == null || fliipped?.links!!.isEmpty()) {
+            return false
+        }
+        return fliipped.links!!.any { it.rel.toUpperCase() == "DELETE" }
+    }
+
 }

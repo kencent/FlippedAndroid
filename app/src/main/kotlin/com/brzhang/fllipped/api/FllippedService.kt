@@ -23,7 +23,7 @@ interface FllippedService {
     @POST("flippedwords")
     fun createFllipped(@Body fllipped: Flippedword): Observable<Flippedword>
 
-    @DELETE("/flippedwords/id")
+    @DELETE("/flippedwords/{id}")
     fun deleteFllipped(@Path("id") id: Int): Observable<Response<Void>>
 
     @GET("nearby_flippedwords")

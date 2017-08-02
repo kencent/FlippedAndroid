@@ -14,6 +14,8 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.brzhang.fllipped.FlippedHelper
 import com.brzhang.fllipped.R
+import com.brzhang.fllipped.RxBus
+import com.brzhang.fllipped.busevent.DeleteFlipped
 import com.brzhang.fllipped.model.FlippedsResponse
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.pref.UserPref
@@ -25,6 +27,7 @@ import retrofit2.Response
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import kotlin.collections.ArrayList
 
 /**
@@ -35,9 +38,10 @@ import kotlin.collections.ArrayList
 open class SqureFragment : BaseFragment() {
 
 
+    private var mCompositeSubscription = CompositeSubscription()
     private var mAdapter: SqureFllippedAdapter? = null
 
-    private var mLastFlipedId:Int? = null
+    private var mLastFlipedId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,17 @@ open class SqureFragment : BaseFragment() {
         setupView(view)
         showLoadingView()
 //        askData() fixme 延迟加载
+        RxBus.getRxBusSingleton().subscribe(mCompositeSubscription) { event: Any? ->
+            if (event is DeleteFlipped) {
+                mAdapter?.deleteFlippedword(event.flippedword)
+            }
+        }
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mCompositeSubscription.clear()
     }
 
     protected var refreshView: TwinklingRefreshLayout? = null
@@ -100,7 +114,7 @@ open class SqureFragment : BaseFragment() {
 
     }
 
-    protected fun loadMore(){
+    protected fun loadMore() {
         askFlippedList()
     }
 
@@ -128,8 +142,8 @@ open class SqureFragment : BaseFragment() {
             params.put("lat", latLng?.lat!!.toString())
             params.put("lng", latLng?.lng!!.toString())
         }
-        if (mLastFlipedId != null){
-            params.put("id",mLastFlipedId!!.toString())
+        if (mLastFlipedId != null) {
+            params.put("id", mLastFlipedId!!.toString())
         }
         fllippedNetService()
                 .getNearByFlippeds(params)
@@ -146,9 +160,9 @@ open class SqureFragment : BaseFragment() {
                     }
 
                     override fun onNext(flippesResonse: FlippedsResponse) {
-                        if (mLastFlipedId == null){
+                        if (mLastFlipedId == null) {
                             showFlippedList(flippesResonse)
-                        }else{
+                        } else {
                             showMoreFlippedList(flippesResonse)
                         }
                     }
@@ -156,12 +170,12 @@ open class SqureFragment : BaseFragment() {
     }
 
     private fun showMoreFlippedList(flippesResonse: FlippedsResponse) {
-        if (flippesResonse.flippedwords != null){
+        if (flippesResonse.flippedwords != null) {
             mAdapter?.fllippeds?.addAll(flippesResonse.flippedwords!!)
             mAdapter?.notifyDataSetChanged()
-            if (flippesResonse.links!=null && canLoadMore(flippesResonse)){
+            if (flippesResonse.links != null && canLoadMore(flippesResonse)) {
                 refreshView?.setEnableLoadmore(true)
-            }else{
+            } else {
                 refreshView?.setEnableLoadmore(false)
             }
             mLastFlipedId = flippesResonse.flippedwords!!.last().id
@@ -169,12 +183,12 @@ open class SqureFragment : BaseFragment() {
     }
 
     fun showFlippedList(fllippesResonse: FlippedsResponse) {
-        if (fllippesResonse.flippedwords != null){
+        if (fllippesResonse.flippedwords != null) {
             mAdapter?.fllippeds = fllippesResonse.flippedwords
             mAdapter?.notifyDataSetChanged()
-            if (fllippesResonse.links!=null && canLoadMore(fllippesResonse)){
+            if (fllippesResonse.links != null && canLoadMore(fllippesResonse)) {
                 refreshView?.setEnableLoadmore(true)
-            }else{
+            } else {
                 refreshView?.setEnableLoadmore(false)
             }
             mLastFlipedId = fllippesResonse.flippedwords!!.last().id
@@ -264,7 +278,7 @@ open class SqureFragment : BaseFragment() {
             })
             val fliipped = fllippeds?.get(position)
             holder.itemView.setOnLongClickListener({
-                if (canDelete(fliipped)) {
+                if (FlippedHelper.canDelete(fliipped)) {
                     MaterialDialog.Builder(context)
                             .title("提示")
                             .content("确认删除该条心动的话？")
@@ -301,12 +315,6 @@ open class SqureFragment : BaseFragment() {
         }
     }
 
-    private fun canDelete(fliipped: Flippedword?): Boolean {
-        if (fliipped?.links == null || fliipped?.links!!.isEmpty()) {
-            return false
-        }
-        return fliipped.links!!.any { it.rel.toUpperCase() == "DELETE" }
-    }
 
     private fun deleteFlippedWords(fliipped: Flippedword?) {
         showLoadingView()
