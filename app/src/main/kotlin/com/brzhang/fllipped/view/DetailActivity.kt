@@ -27,8 +27,6 @@ import com.brzhang.fllipped.busevent.DeleteFlipped
 import com.brzhang.fllipped.model.Comment
 import com.brzhang.fllipped.model.CommentListResponse
 import com.brzhang.fllipped.model.Content
-import com.brzhang.fllipped.pref.UserPref
-import okhttp3.ResponseBody
 import retrofit2.Response
 
 
@@ -66,6 +64,8 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
     private var mRecyclerView: RecyclerView? = null
 
     private var adapter: CommentAdapter? = null
+
+    private var mCommentNum: TextView? = null
 
     override fun handleRxEvent(event: Any?) {
     }
@@ -141,6 +141,7 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         mVideo = flipped_detail_video
         mLlComment = flipped_detail_comment_ll
         mRecyclerView = flipped_detail_comment_recycler_view
+        mCommentNum = flipped_detail_iv_comment_all
         mLlComment?.setOnClickListener({
             showCommentDialog()
         })
@@ -283,6 +284,9 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         } else {
             mVideo?.visibility = View.VISIBLE
             mVideo?.setVideoURI(Uri.parse(FlippedHelper.getVideo(t)))
+        }
+        if (mFlipped?.commentnum != null && mFlipped?.commentnum != 0) {
+            mCommentNum?.text = """${mCommentNum?.text.toString()} ${mFlipped?.commentnum.toString()}"""
         }
     }
 

@@ -127,13 +127,22 @@ open class SqureFragment : BaseFragment() {
     protected open fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
         if (TextUtils.isEmpty(FlippedHelper.getDistance(flippedword))) {
             holder.flippedDistance.visibility = View.GONE
-            holder.flippedDistanceDivider.visibility = View.GONE
         } else {
-            holder.flippedDistanceDivider.visibility = View.VISIBLE
             holder.flippedDistance.visibility = View.VISIBLE
-            holder.flippedDistance.text = "距离：${FlippedHelper.getDistance(flippedword)}"
+            holder.flippedDistance.text = FlippedHelper.getDistance(flippedword)
         }
     }
+
+    protected fun showCommentNum(holder: ViewHolder, commentnum: Int?) {
+        if (commentnum == null || commentnum == 0) {
+            holder.flippedCommentnum.visibility = View.GONE
+            holder.flippedCommentnum.text = "0"
+        } else {
+            holder.flippedCommentnum.visibility = View.VISIBLE
+            holder.flippedCommentnum.text = commentnum.toString()
+        }
+    }
+
 
     open fun askFlippedList() {
         LogUtil.dLoge("hoolly", "squre fragment load data")
@@ -255,8 +264,9 @@ open class SqureFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
-            holder.flippedSento.text = "发送给：${fllippeds?.get(position)?.sendto.toString()}"
+            holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
             showDistanceOrReadState(holder, fllippeds?.get(position))
+            showCommentNum(holder, fllippeds?.get(position)?.commentnum)
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE
             } else {
@@ -318,7 +328,6 @@ open class SqureFragment : BaseFragment() {
         }
     }
 
-
     private fun deleteFlippedWords(fliipped: Flippedword?) {
         showLoadingView()
         fllippedNetService().deleteFllipped(fliipped?.id ?: 0)
@@ -351,7 +360,7 @@ open class SqureFragment : BaseFragment() {
         val flippedText: TextView = itemView.findViewById(R.id.flipped_item_tv_text) as TextView
         val flippedSento: TextView = itemView.findViewById(R.id.flipped_item_tv_send_to) as TextView
         val flippedDistance: TextView = itemView.findViewById(R.id.flipped_item_tv_send_distance) as TextView
-        val flippedDistanceDivider: ImageView = itemView.findViewById(R.id.flipped_item_iv_divider) as ImageView
+        val flippedCommentnum: TextView = itemView.findViewById(R.id.flipped_item_tv_comment_num) as TextView
         val tagPic: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_pic) as ImageView
         val tagVoice: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_voice) as ImageView
         val tagVideo: ImageView = itemView.findViewById(R.id.flipped_item_iv_tag_video) as ImageView

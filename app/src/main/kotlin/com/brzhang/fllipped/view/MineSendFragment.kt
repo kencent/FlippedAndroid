@@ -1,6 +1,7 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,11 +47,12 @@ class MineSendFragment : SqureFragment() {
     }
 
     override fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
+        holder.flippedDistance.setCompoundDrawablesRelativeWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_hearing_black_18dp), null, null, null)
         holder.flippedDistance.text = FlippedHelper.getReadState(flippedword)
     }
 
     override fun askFlippedList() {
-        LogUtil.dLoge("hoolly","send fragment load data")
+        LogUtil.dLoge("hoolly", "send fragment load data")
         fllippedNetService()
                 .getMypubFlippedwords(mflippedId)
                 .subscribeOn(Schedulers.io())
@@ -75,9 +77,9 @@ class MineSendFragment : SqureFragment() {
                         } else {
                             appendFlippedList(flippesResonse)
                         }
-                        if (canLoadMore(flippesResonse)){
+                        if (canLoadMore(flippesResonse)) {
                             refreshView?.setEnableLoadmore(true)
-                        }else{
+                        } else {
                             refreshView?.setEnableLoadmore(false)
                         }
                         nomoreView(R.string.no_more_send)

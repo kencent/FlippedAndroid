@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,10 +13,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textSize="@dimen/text_size_xl"
         android:textColor="@color/text_color_h2"
-        tools:text="我发表了一条心情,我发我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情表了一条心情我发表了一条心情我发表了一条心情"
-    />
+        android:textSize="@dimen/text_size_xl"
+        tools:text="我发表了一条心情,我发我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情我发表了一条心情表了一条心情我发表了一条心情我发表了一条心情" />
 
     <RelativeLayout
         android:id="@+id/flipped_item_rl_sender_info"
@@ -31,18 +29,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_near_me_black_18dp"
+            android:drawablePadding="3dp"
             android:textColor="@color/textColorTertiary"
             android:textSize="@dimen/text_size_l"
-            tools:text="发送给186******72"
-        />
-        <ImageView
-            android:id="@+id/flipped_item_iv_divider"
-            android:layout_width="1dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@+id/flipped_item_tv_send_to"
-            android:background="@color/textColorTertiary"
-        />
+            tools:text="186******72" />
 
         <TextView
             android:id="@+id/flipped_item_tv_send_distance"
@@ -50,35 +41,48 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@+id/flipped_item_iv_divider"
+            android:layout_toRightOf="@+id/flipped_item_tv_send_to"
+            android:drawableLeft="@drawable/ic_location_on_black_18dp"
+            android:drawablePadding="3dp"
             android:textColor="@color/textColorTertiary"
             android:textSize="@dimen/text_size_l"
-            tools:text="距离：2.3km"
-        />
+            tools:text="2.3km" />
+
+        <TextView
+            android:id="@+id/flipped_item_tv_comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@+id/flipped_item_tv_send_distance"
+            android:drawableLeft="@drawable/ic_comment_black_18dp"
+            android:drawablePadding="3dp"
+            android:textColor="@color/textColorTertiary"
+            android:textSize="@dimen/text_size_l"
+            tools:text="18" />
 
         <ImageView
             android:id="@+id/flipped_item_iv_tag_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/flipped_ic_tag_tu"
-        />
+            android:src="@drawable/flipped_ic_tag_tu" />
+
         <ImageView
             android:id="@+id/flipped_item_iv_tag_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@id/flipped_item_iv_tag_pic"
-            android:src="@drawable/flipped_ic_tag_voice"
-        />
+            android:src="@drawable/flipped_ic_tag_voice" />
+
         <ImageView
             android:id="@+id/flipped_item_iv_tag_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@id/flipped_item_iv_tag_voice"
-            android:src="@drawable/flipped_ic_tag_video"
-        />
+            android:src="@drawable/flipped_ic_tag_video" />
 
     </RelativeLayout>
 
@@ -88,7 +92,6 @@
         android:layout_height="0.5dp"
         android:layout_below="@+id/flipped_item_rl_sender_info"
         android:layout_marginTop="12dp"
-        android:background="@color/textColorTertiary"
-    />
+        android:background="@color/textColorTertiary" />
 
 </RelativeLayout>

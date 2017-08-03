@@ -27,12 +27,32 @@ class Flippedword() : Parcelable {
 
     var lng: Double? = null
 
+    var commentnum:Int? = null
+
     constructor(parcel: Parcel) : this() {
+        sendto = parcel.readString()
+        lat = parcel.readValue(Double::class.java.classLoader) as? Double
+        links = parcel.createTypedArrayList(Link.CREATOR)
+        id = parcel.readValue(Int::class.java.classLoader) as? Int
+        ctime = parcel.readValue(Long::class.java.classLoader) as? Long
         distance = parcel.readValue(Long::class.java.classLoader) as? Long
+        contents = parcel.createTypedArrayList(Content)
+        status = parcel.readValue(Int::class.java.classLoader) as? Int
+        lng = parcel.readValue(Double::class.java.classLoader) as? Double
+        commentnum = parcel.readValue(Int::class.java.classLoader) as? Int
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(sendto)
+        parcel.writeValue(lat)
+        parcel.writeTypedList(links)
+        parcel.writeValue(id)
+        parcel.writeValue(ctime)
         parcel.writeValue(distance)
+        parcel.writeTypedList(contents)
+        parcel.writeValue(status)
+        parcel.writeValue(lng)
+        parcel.writeValue(commentnum)
     }
 
     override fun describeContents(): Int {
@@ -48,5 +68,6 @@ class Flippedword() : Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 
 }
