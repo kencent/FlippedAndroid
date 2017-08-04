@@ -125,12 +125,7 @@ open class SqureFragment : BaseFragment() {
     }
 
     protected open fun showDistanceOrReadState(holder: ViewHolder, flippedword: Flippedword?) {
-        if (TextUtils.isEmpty(FlippedHelper.getDistance(flippedword))) {
-            holder.flippedDistance.visibility = View.GONE
-        } else {
-            holder.flippedDistance.visibility = View.VISIBLE
-            holder.flippedDistance.text = FlippedHelper.getDistance(flippedword)
-        }
+        holder.flippedDistance.text = FlippedHelper.getDistance(flippedword)
     }
 
     protected fun showCommentNum(holder: ViewHolder, commentnum: Int?) {

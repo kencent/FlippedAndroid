@@ -278,6 +278,9 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
         } else {
             mImage?.visibility = View.VISIBLE
             Glide.with(this).load(FlippedHelper.getPic(t)).into(mImage)
+            mImage?.setOnClickListener {
+                ImageDetailActivity.lanuchMe(this, arrayListOf(FlippedHelper.getPic(t)))
+            }
         }
         if (FlippedHelper.getVideo(t).isBlank()) {
             mVideo?.visibility = View.GONE

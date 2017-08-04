@@ -77,7 +77,7 @@ object FlippedHelper {
         if (distance > 1000) {
             return String.format("%.1fkm", distance / 1000.0)
         } else if (distance == 0L) {
-            return ""
+            return "在你附近"
         } else {
             return "${distance}m"
         }

@@ -71,7 +71,7 @@ abstract class FlippedBaseActivity : BaseActivity() {
     }
 
     open fun onOptionHomeClick(){
-
+        this.finish()
     }
     protected fun setSubContent() {
         val container = findViewById(R.id.activity_base_container) as FrameLayout
