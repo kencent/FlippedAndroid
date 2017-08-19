@@ -208,6 +208,15 @@
 -dontwarn c.t.m.g.**
 -dontwarn cn.bingoogolapple.refreshlayout.adapters.**
 
+-keep class com.tencent.mm.opensdk.** {
+   *;
+}
+-keep class com.tencent.wxop.** {
+   *;
+}
+-keep class com.tencent.mm.sdk.** {
+   *;
+}
 
 # for DexGuard only
 #-keepresourcexmlelements manifest/application/meta-data@value=GlideModule

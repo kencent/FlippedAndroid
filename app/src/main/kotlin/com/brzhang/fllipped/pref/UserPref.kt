@@ -26,6 +26,8 @@ object UserPref {
 
     val KEY_IS_TOAST_NEED_LOGIN = "key_is_toast_need_login"
 
+    val KEY_IS_INTRODUCE = "key_is_introduce"
+
     fun getString(ctx: Context, key: String, defaultValue: String): String {
         val sp = ctx.getSharedPreferences(PREF_NAME,
                 Context.MODE_PRIVATE)
@@ -105,7 +107,15 @@ object UserPref {
     }
 
     fun setHasBeenTastNeedLogin(context: Context, value: Boolean) {
-        return setBoolean(context, KEY_IS_TOAST_NEED_LOGIN, value)
+        setBoolean(context, KEY_IS_TOAST_NEED_LOGIN, value)
+    }
+
+    fun isIntroduced(context: Context, defaultValue: Boolean): Boolean {
+        return getBoolean(context, KEY_IS_INTRODUCE, defaultValue)
+    }
+
+    fun setIsIntroduced(context: Context, value: Boolean) {
+        setBoolean(context, KEY_IS_INTRODUCE, value)
     }
 
 }
