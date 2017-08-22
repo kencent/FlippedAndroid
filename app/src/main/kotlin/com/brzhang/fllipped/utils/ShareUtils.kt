@@ -9,6 +9,7 @@ import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
 
 /**
@@ -24,7 +25,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 object ShareUtils {
     private val THUMB_SIZE = 150
 
-    fun shareMoment(iwxapi: IWXAPI, context: Context, url: String, title: String, description: String) {
+    private val WX_APP_ID = "wxf72f0e149d736899"
+    /*分享朋友圈*/
+    fun shareMoment(context: Context, url: String, title: String, description: String) {
         val webpage = WXWebpageObject()
         webpage.webpageUrl = url
         val msg = WXMediaMessage(webpage)
@@ -40,6 +43,28 @@ object ShareUtils {
         req.message = msg
 //        req.scene = mTargetScene
         req.scene = SendMessageToWX.Req.WXSceneTimeline
+        val iwxapi = WXAPIFactory.createWXAPI(context, WX_APP_ID)
+        iwxapi.sendReq(req)
+    }
+
+    /*分享好友*/
+    fun shareFriends(context: Context, url: String, title: String, description: String) {
+        val webpage = WXWebpageObject()
+        webpage.webpageUrl = url
+        val msg = WXMediaMessage(webpage)
+        msg.title = title
+        msg.description = description
+        val bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)
+        val thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true)
+        bmp.recycle()
+        msg.thumbData = WXUtil.bmpToByteArray(thumbBmp, true)
+
+        val req = SendMessageToWX.Req()
+        req.transaction = buildTransaction("webpage")
+        req.message = msg
+//        req.scene = mTargetScene
+        req.scene = SendMessageToWX.Req.WXSceneSession
+        val iwxapi = WXAPIFactory.createWXAPI(context, WX_APP_ID)
         iwxapi.sendReq(req)
     }
 

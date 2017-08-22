@@ -5,5 +5,10 @@
         android:id="@+id/op_delete"
         android:icon="@drawable/ic_delete_white_24dp"
         android:title="删除"
-        app:showAsAction="always"></item>
+        app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/op_share"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="分享"
+        app:showAsAction="ifRoom"></item>
 </menu>

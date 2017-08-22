@@ -106,6 +106,9 @@ class DetailActivity : FlippedBaseActivity(), OnPreparedListener {
                             .show()
                 }
             }
+            R.id.op_share -> {
+                ShareDialogFragment.newInstance("""https://flippedwords.com/d.html?id=$mFlippedId""", "说句心动话", mtext?.text.toString()).show(supportFragmentManager, "share")
+            }
         }
         return super.onOptionsItemSelected(item)
     }
