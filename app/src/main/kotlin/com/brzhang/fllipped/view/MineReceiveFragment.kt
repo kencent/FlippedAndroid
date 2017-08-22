@@ -1,6 +1,7 @@
 package com.brzhang.fllipped.view
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import com.brzhang.fllipped.App
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.model.FlippedsResponse
+import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.pref.UserPref
 import com.brzhang.fllipped.utils.LogUtil
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -45,16 +47,25 @@ class MineReceiveFragment : SqureFragment() {
         })
     }
 
+    override fun showOtherThings(holder: ViewHolder, flippedword: Flippedword?) {
+        super.showOtherThings(holder, flippedword)
+        if (flippedword?.status == 0) {
+            holder.flippedText.setTextColor(ContextCompat.getColor(context, R.color.text_color_h2))
+        } else {
+            holder.flippedText.setTextColor(ContextCompat.getColor(context, R.color.textColorTertiary))
+        }
+    }
+
     override fun askFlippedList() {
-        LogUtil.dLoge("hoolly","receiver fragment load data")
+        LogUtil.dLoge("hoolly", "receiver fragment load data")
         var params = HashMap<String, String>()
         val latLng = UserPref.getUserLocation(App.ApplicationContext())
         if (latLng != null) {
             params.put("lat", latLng?.lat!!.toString())
             params.put("lng", latLng?.lng!!.toString())
         }
-        if (mflippedId != null){
-            params.put("id",mflippedId!!.toString())
+        if (mflippedId != null) {
+            params.put("id", mflippedId!!.toString())
         }
         fllippedNetService()
                 .getReceivesFlippedwords(params)
@@ -80,9 +91,9 @@ class MineReceiveFragment : SqureFragment() {
                         } else {
                             appendFlippedList(flippesResonse)
                         }
-                        if (canLoadMore(flippesResonse)){
+                        if (canLoadMore(flippesResonse)) {
                             refreshView?.setEnableLoadmore(true)
-                        }else{
+                        } else {
                             refreshView?.setEnableLoadmore(false)
                         }
                         nomoreView(R.string.no_more_receive)

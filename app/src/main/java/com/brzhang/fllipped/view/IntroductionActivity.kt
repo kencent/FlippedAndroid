@@ -46,7 +46,7 @@ class IntroductionActivity : AppCompatActivity() {
             if (!UserPref.isIntroduced(context, false)) {
                 var intent = Intent(context, IntroductionActivity::class.java)
                 context.startActivity(intent)
-//                UserPref.setIsIntroduced(context, true)
+                UserPref.setIsIntroduced(context, true)
             }
         }
     }
