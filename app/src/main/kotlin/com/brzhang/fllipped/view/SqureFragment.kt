@@ -128,6 +128,10 @@ open class SqureFragment : BaseFragment() {
         holder.flippedDistance.text = FlippedHelper.getDistance(flippedword)
     }
 
+    protected open fun showOtherThings(holder: ViewHolder, flippedword: Flippedword?) {
+
+    }
+
     protected fun showCommentNum(holder: ViewHolder, commentnum: Int?) {
         if (commentnum == null || commentnum == 0) {
             holder.flippedCommentnum.visibility = View.GONE
@@ -261,6 +265,7 @@ open class SqureFragment : BaseFragment() {
             holder.flippedText.text = fllippeds?.get(position)?.contents?.get(0)?.text
             holder.flippedSento.text = fllippeds?.get(position)?.sendto.toString()
             showDistanceOrReadState(holder, fllippeds?.get(position))
+            showOtherThings(holder,fllippeds?.get(position))
             showCommentNum(holder, fllippeds?.get(position)?.commentnum)
             if (!FlippedHelper.getPic(fllippeds?.get(position)).isEmpty()) {
                 holder.tagPic.visibility = View.VISIBLE

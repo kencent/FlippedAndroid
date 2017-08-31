@@ -20,6 +20,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     val mSqureFragment = SqureFragment.newInstance()
     val mMineFragment = MineFragment.newInstance()
+    var mCallFragment = CallFragment.newInstance()
 
     override fun handleRxEvent(event: Any?) {
 
@@ -47,7 +48,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
-        IntroductionActivity.lanuchMe(this);
+        IntroductionActivity.lanuchMe(this)
     }
 
     override fun onResume() {
@@ -154,7 +155,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 R.id.tab_nearby -> {
                     showSqureFragment()
                 }
-                R.id.tab_friends -> {
+                R.id.tab_call ->{
+                    showCallFragment()
+                }
+                R.id.tab_mine -> {
                     showMineFragment()
                 }
             }
@@ -166,8 +170,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 R.id.tab_nearby -> {
                     dToast("tab_nearby click double")
                 }
-                R.id.tab_friends -> {
-                    dToast("tab_friends click double")
+                R.id.tab_mine -> {
+                    dToast("tab_mine click double")
                 }
             }
         }
@@ -177,6 +181,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun showMineFragment() {
         val transAction = supportFragmentManager.beginTransaction()
         transAction.hide(mSqureFragment)
+        transAction.hide(mCallFragment)
         transAction.show(mMineFragment)
         transAction.commitAllowingStateLoss()
         title = "我的"
@@ -184,10 +189,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
+    private fun showCallFragment() {
+        val transAction = supportFragmentManager.beginTransaction()
+        transAction.hide(mSqureFragment)
+        transAction.show(mCallFragment)
+        transAction.hide(mMineFragment)
+        transAction.commitAllowingStateLoss()
+        title = "monkey"
+    }
+
     private fun showSqureFragment() {
         val transAction = supportFragmentManager.beginTransaction()
         transAction.show(mSqureFragment)
         transAction.hide(mMineFragment)
+        transAction.hide(mCallFragment)
         transAction.commitAllowingStateLoss()
         title = "广场"
     }
@@ -195,6 +210,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun setupBottomBarFragments() {
         val transAction = supportFragmentManager.beginTransaction()
         transAction.add(R.id.activity_main_fragment_container, mSqureFragment)
+        transAction.add(R.id.activity_main_fragment_container, mCallFragment)
         transAction.add(R.id.activity_main_fragment_container, mMineFragment)
         transAction.show(mSqureFragment)
         transAction.commitAllowingStateLoss()

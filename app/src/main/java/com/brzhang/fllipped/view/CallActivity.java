@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.brzhang.fllipped.R;
 import com.tencent.av.sdk.AVAudioCtrl;
@@ -60,6 +62,7 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     private boolean bMicEnalbe = true;
     private boolean bSpeaker = true;
     private int mCurCameraId = ILiveConstants.FRONT_CAMERA;
+    private ArrayList<String> nums;
 
     private void initView() {
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
@@ -181,7 +184,7 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
         setContentView(R.layout.activity_simple_call);
         initView();
 
-        checkPermission();
+
         // 添加通话回调
         ILVCallManager.getInstance().addCallListener(this);
 
@@ -189,13 +192,18 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
         mHostId = intent.getStringExtra("HostId");
         mCallType = intent.getIntExtra("CallType", ILVCallConstants.CALL_TYPE_VIDEO);
         mCallId = intent.getIntExtra("CallId", 0);
+        nums = intent.getStringArrayListExtra("CallNumbers");
+        checkPermission();
+    }
+
+    private void initData() {
         ILVCallOption option = new ILVCallOption(mHostId)
                 .callTips("CallSDK Demo")
                 .setMemberListener(this)
                 .setCallType(mCallType);
         if (0 == mCallId) { // 发起呼叫
-            List<String> nums = intent.getStringArrayListExtra("CallNumbers");
-            if (nums.size() > 1){
+
+            if (nums!= null && nums.size() > 1){
                 mCallId = ILVCallManager.getInstance().makeMutiCall(nums, option);
             }else{
                 mCallId = ILVCallManager.getInstance().makeCall(nums.get(0), option);
@@ -331,6 +339,21 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     public void onMemberEvent(String id, boolean bEnter) {
         addLogMessage("["+id+"] "+(bEnter?"join":"exit")+" call");
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    ||(checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)){
+                Toast.makeText(this,"需要授权后才能使用视频",Toast.LENGTH_LONG).show();
+                finish();
+            }else{
+
+            }
+        }
+    }
+
     void checkPermission() {
         final List<String> permissionsList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -345,6 +368,8 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
             if (permissionsList.size() != 0) {
                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_PHONE_PERMISSIONS);
+            }else{
+                initData();
             }
         }
     }

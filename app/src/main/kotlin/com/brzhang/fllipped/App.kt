@@ -1,7 +1,7 @@
 package com.brzhang.fllipped
 
-import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
 import com.brzhang.fllipped.utils.LogUtil
 import com.tencent.mta.track.StatisticsDataAPI
 import com.tencent.stat.StatService
@@ -22,7 +22,7 @@ import com.tencent.stat.StatReportStrategy
  * Created by brzhang on 2017/7/8.
  * Description :
  */
-class App : Application() {
+class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

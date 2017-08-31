@@ -5,7 +5,11 @@
         icon="@drawable/ic_nearby"
         title="广场" />
     <tab
-        id="@+id/tab_friends"
+        id="@+id/tab_call"
+        icon="@drawable/ic_videocam_black_24dp"
+        title="广场" />
+    <tab
+        id="@+id/tab_mine"
         icon="@drawable/ic_friends"
         title="我的" />
 </tabs>
