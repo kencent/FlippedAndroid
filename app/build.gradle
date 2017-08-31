@@ -134,4 +134,8 @@ dependencies {
 
     //wechat
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+
+    //视频
+    compile 'com.tencent.ilivesdk:ilivesdk:1.5.2.0.6'
+    compile 'com.tencent.callsdk:callsdk:1.0.16'
 }

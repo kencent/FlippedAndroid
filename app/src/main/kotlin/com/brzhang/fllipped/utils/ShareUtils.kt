@@ -19,6 +19,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
  *
  * api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
  * ShareUtils.shareMoment(api,this,......)
+ * https://flippedwords.com/d.html?id=1000118
  */
 
 object ShareUtils {

@@ -96,6 +96,14 @@
                   android:screenOrientation="portrait"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
+        <activity android:name=".view.ContactActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity android:name=".view.CallActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
