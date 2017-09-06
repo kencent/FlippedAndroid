@@ -42,7 +42,13 @@ interface FllippedService {
     fun getSign(): Observable<SignResponse>
 
     @GET("ilvbsig")
-    fun getLvbSig():Observable<SignResponse>
+    fun getLvbSig(): Observable<SignResponse>
+
+    @POST("flippedcalls")
+    fun callSomeOne(@Body callRequeset: CallRequeset): Observable<CallResponse>
+
+    @DELETE("flippedcalls")
+    fun cancelCall(): Observable<ResponseBody>
 
     @GET("help")
     fun getHelp(): Observable<Flippedword>

@@ -9,10 +9,16 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.brzhang.fllipped.App
+import com.brzhang.fllipped.Config
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.pref.UserPref
+import com.tencent.callsdk.ILVCallConfig
+import com.tencent.callsdk.ILVCallManager
+import com.tencent.ilivesdk.ILiveSDK
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +55,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
         IntroductionActivity.lanuchMe(this)
+        ILiveSDK.getInstance().initSdk(App.ApplicationContext(), Config.HU_DOND_VIDEO_APP_ID, Config.VIDEO_APP_ACCOUNT_TYPE)
     }
 
     override fun onResume() {
@@ -70,18 +77,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val id = item.itemId
 
         if (id == R.id.nav_feed_back) {
-            if (UserPref.isUserLogin(applicationContext)){
+            if (UserPref.isUserLogin(applicationContext)) {
                 ReportActivity.startReport(this)
-            }else{
+            } else {
                 gotoLoginActivity()
             }
         } else if (id == R.id.nav_quite) {
-            if (UserPref.isUserLogin(applicationContext)){
+            if (UserPref.isUserLogin(applicationContext)) {
                 confirmLoginout()
-            }else{
+            } else {
                 toast("当前并没有登录")
             }
-        }else if(id == R.id.nav_help){
+        } else if (id == R.id.nav_help) {
             AboutActivity.startMe(this)
         }
 
@@ -117,12 +124,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
+    private var mAddBtnNeedShow: Boolean = true
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.op_add)?.isVisible = mAddBtnNeedShow
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.op_add -> {
-                if (UserPref.isUserLogin(applicationContext)){
+                if (UserPref.isUserLogin(applicationContext)) {
                     startPostActivity()
-                }else{
+                } else {
                     gotoLoginActivity()
                 }
             }
@@ -149,23 +163,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun registeBottomBarCallBacks() {
-        bottomBar.setOnTabSelectListener {
-            tabId: Int ->
+        bottomBar.setOnTabSelectListener { tabId: Int ->
             when (tabId) {
                 R.id.tab_nearby -> {
                     showSqureFragment()
+                    showAddFeedBtn()
                 }
-                R.id.tab_call ->{
+                R.id.tab_call -> {
                     showCallFragment()
+                    hideAddFeedsBtn()
                 }
                 R.id.tab_mine -> {
                     showMineFragment()
+                    showAddFeedBtn()
                 }
             }
         }
 
-        bottomBar.setOnTabReselectListener {
-            tabId: Int ->
+        bottomBar.setOnTabReselectListener { tabId: Int ->
             when (tabId) {
                 R.id.tab_nearby -> {
                     dToast("tab_nearby click double")
@@ -176,6 +191,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         title = "广场"
+    }
+
+    private fun showAddFeedBtn() {
+        mAddBtnNeedShow = true
+        supportInvalidateOptionsMenu()
+    }
+
+    private fun hideAddFeedsBtn() {
+        mAddBtnNeedShow = false
+        supportInvalidateOptionsMenu()
     }
 
     private fun showMineFragment() {
@@ -195,7 +220,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transAction.show(mCallFragment)
         transAction.hide(mMineFragment)
         transAction.commitAllowingStateLoss()
-        title = "monkey"
+        title = "视频聊"
     }
 
     private fun showSqureFragment() {

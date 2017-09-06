@@ -25,48 +25,52 @@ import java.util.*
  * Description :
  */
 object RetrofitClient {
+    var instance: Retrofit? = null
     fun newInstance(username: String = "", salt: String = ""): Retrofit {
 
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor { chain ->
-            val original = chain.request()
-            var username = username
-            var salt = salt
+        if (instance == null) {
+            val httpClient = OkHttpClient.Builder()
+            httpClient.addInterceptor { chain ->
+                val original = chain.request()
+                var username = username
+                var salt = salt
 
-            if (username.isEmpty()) {
-                username = UserPref.getUserName(App.ApplicationContext(), "")
+                if (username.isEmpty()) {
+                    username = UserPref.getUserName(App.ApplicationContext(), "")
+                }
+                if (salt.isEmpty()) {
+                    salt = UserPref.getUserSalt(App.ApplicationContext(), "")
+                }
+
+                if (username.isEmpty()) {
+                    username = "10000"
+                }
+
+                var password = UserPref.getUserPassWord(App.ApplicationContext(), "")
+
+                LogUtil.dLoge("hoolly", "username is [$username]")
+                LogUtil.dLoge("hoolly", "s is [$salt]")
+                val token = getAuthorization(chain, username, salt, password)
+                val request = original.newBuilder()
+                        .header("Authorization", token)
+                        .header("x-uid", username)
+                        .method(original.method(), original.body())
+                        .build()
+                var response = chain.proceed(request)
+                if (response.code() == 401) {
+                    RxBus.getRxBusSingleton().send(UserAuthFailed())
+                }
+                response
             }
-            if (salt.isEmpty()) {
-                salt = UserPref.getUserSalt(App.ApplicationContext(), "")
-            }
-
-            if (username.isEmpty()) {
-                username = "10000"
-            }
-
-            var password = UserPref.getUserPassWord(App.ApplicationContext(), "")
-
-            LogUtil.dLoge("hoolly", "username is [$username]")
-            LogUtil.dLoge("hoolly", "s is [$salt]")
-            val token = getAuthorization(chain, username, salt, password)
-            val request = original.newBuilder()
-                    .header("Authorization", token)
-                    .header("x-uid", username)
-                    .method(original.method(), original.body())
+            instance = Retrofit.Builder()
+                    .client(httpClient.build())
+                    .baseUrl(Env.getHttpUrl())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build()
-            var response = chain.proceed(request)
-            if (response.code() == 401) {
-                RxBus.getRxBusSingleton().send(UserAuthFailed())
-            }
-            response
         }
-        val retrofit = Retrofit.Builder()
-                .client(httpClient.build())
-                .baseUrl(Env.getHttpUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-        return retrofit
+
+        return instance!!
 
     }
 

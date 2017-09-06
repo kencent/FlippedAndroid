@@ -30,6 +30,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="50dp"
             android:gravity="right"
+            android:visibility="gone"
             android:orientation="vertical">
             <Button
                 android:id="@+id/btn_camera"
@@ -110,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:onClick="onClick"
+                android:background="@drawable/flipped_button_background"
                 android:text="@string/tip_end_call"
                 android:textColor="@color/color_white"
                 android:visibility="gone"/>

@@ -1,9 +1,14 @@
 package com.brzhang.fllipped;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 
 import com.brzhang.fllipped.view.BaseActivity;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by brzhang on 2017/7/9.
@@ -22,4 +27,11 @@ public class jfoActiviy extends BaseActivity {
         intent.putExtra(KEY_SFES,id);
         context.startActivity(intent);
     }
+
+    private Runnable run = new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
 }
