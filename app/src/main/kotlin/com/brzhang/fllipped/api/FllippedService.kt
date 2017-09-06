@@ -41,6 +41,9 @@ interface FllippedService {
     @GET("youtusig")
     fun getSign(): Observable<SignResponse>
 
+    @GET("ilvbsig")
+    fun getLvbSig():Observable<SignResponse>
+
     @GET("help")
     fun getHelp(): Observable<Flippedword>
 

@@ -6,6 +6,7 @@ package com.brzhang.fllipped
  * Description :配置文件
  */
 
-class Config{
-
+object Config {
+    val HU_DOND_VIDEO_APP_ID = 1400038614
+    val VIDEO_APP_ACCOUNT_TYPE = 14999
 }
