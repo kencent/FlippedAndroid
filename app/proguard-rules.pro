@@ -218,5 +218,14 @@
    *;
 }
 
+-keep class com.tencent.**{*;}
+-dontwarn com.tencent.**
+
+-keep class tencent.**{*;}
+-dontwarn tencent.**
+
+-keep class qalsdk.**{*;}
+-dontwarn qalsdk.**
+
 # for DexGuard only
 #-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
