@@ -56,20 +56,20 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     private static final int REQUEST_PHONE_PERMISSIONS = 0;
     private Button btnEndCall, btnCamera, btnMic, btnSpeaker;
     private AVRootView avRootView;
-    private TextView   tvTitle, tvLog;
+    private TextView tvTitle, tvLog;
     private RelativeLayout rlControl;
-    private LinearLayout   llBeauty;
-    private SeekBar        sbBeauty;
+    private LinearLayout llBeauty;
+    private SeekBar sbBeauty;
 
     private String mHostId;
-    private int    mCallId;
-    private int    mCallType;
-    private int    mBeautyRate;
+    private int mCallId;
+    private int mCallType;
+    private int mBeautyRate;
 
     private boolean bCameraEnable = true;
-    private boolean bMicEnalbe    = true;
-    private boolean bSpeaker      = true;
-    private int     mCurCameraId  = ILiveConstants.FRONT_CAMERA;
+    private boolean bMicEnalbe = true;
+    private boolean bSpeaker = true;
+    private int mCurCameraId = ILiveConstants.FRONT_CAMERA;
     private ArrayList<String> nums;
 
     private void initView() {

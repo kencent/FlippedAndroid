@@ -195,6 +195,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun showAddFeedBtn() {
         mAddBtnNeedShow = true
+        mCallFragment.cancelCall()
         supportInvalidateOptionsMenu()
     }
 
