@@ -156,7 +156,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
                         dtoast("调用后台预call失败")
                     }
 
-                    override fun onNext(callResponse: ResponseBody) {
+                    override fun onNext(callResponse: ResponseBody?) {
 
                     }
                 })

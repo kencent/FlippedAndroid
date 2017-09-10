@@ -1,6 +1,9 @@
 package com.brzhang.fllipped.view
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -20,6 +23,7 @@ import com.tencent.callsdk.ILVCallConfig
 import com.tencent.callsdk.ILVCallManager
 import com.tencent.ilivesdk.ILiveSDK
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.ArrayList
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     val TAG = "MainActivity"
@@ -170,6 +174,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     showAddFeedBtn()
                 }
                 R.id.tab_call -> {
+                    checkPermission()
                     showCallFragment()
                     hideAddFeedsBtn()
                 }
@@ -239,5 +244,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transAction.add(R.id.activity_main_fragment_container, mMineFragment)
         transAction.show(mSqureFragment)
         transAction.commitAllowingStateLoss()
+    }
+
+    internal fun checkPermission() {
+        val REQUEST_PHONE_PERMISSIONS = 200
+        val permissionsList = ArrayList<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                permissionsList.add(Manifest.permission.CAMERA)
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
+                permissionsList.add(Manifest.permission.RECORD_AUDIO)
+            if (checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED)
+                permissionsList.add(Manifest.permission.WAKE_LOCK)
+            if (checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED)
+                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS)
+            if (permissionsList.size != 0) {
+                requestPermissions(permissionsList.toTypedArray(),
+                        REQUEST_PHONE_PERMISSIONS)
+            } else {
+//                initData()
+            }
+        }
     }
 }
