@@ -57,7 +57,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
             } else {
                 mCallState = CallState.Init
                 switchCallBtn()
-                canelCall()
+                cancelCall()
             }
         }
         ILVCallManager.getInstance().init(ILVCallConfig()
@@ -144,7 +144,8 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         })
     }
 
-    private fun canelCall() {
+    public fun cancelCall() {
+        switchCallBtn()
         mHandler.removeCallbacks(mCallRunable)
         fllippedNetService().cancelCall().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
