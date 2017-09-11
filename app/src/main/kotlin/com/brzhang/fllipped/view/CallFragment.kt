@@ -52,11 +52,10 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
                     switchCallBtn()
                     callSomeOne()
                 } else {
-                    toast("sdk 故障，请稍后再试~~")
+                    loginSdkAndpreCall()
+//                    toast("sdk 故障，请稍后再试~~")
                 }
             } else {
-                mCallState = CallState.Init
-                switchCallBtn()
                 cancelCall()
             }
         }
@@ -145,6 +144,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
     }
 
     public fun cancelCall() {
+        mCallState = CallState.Init
         switchCallBtn()
         mHandler.removeCallbacks(mCallRunable)
         fllippedNetService().cancelCall().subscribeOn(Schedulers.io())
@@ -154,7 +154,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
                     }
 
                     override fun onError(e: Throwable) {
-                        dtoast("调用后台预call失败")
+                        dtoast("取消call失败")
                     }
 
                     override fun onNext(callResponse: ResponseBody?) {

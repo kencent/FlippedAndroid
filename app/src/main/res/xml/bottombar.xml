@@ -7,7 +7,7 @@
     <tab
         icon="@drawable/ic_videocam_black_24dp"
         id="@+id/tab_call"
-        title="视频聊"/>
+        title="配聊"/>
     <tab
         icon="@drawable/ic_friends"
         id="@+id/tab_mine"

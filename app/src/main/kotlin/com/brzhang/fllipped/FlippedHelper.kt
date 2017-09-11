@@ -77,7 +77,7 @@ object FlippedHelper {
         if (distance > 1000) {
             return String.format("%.1fkm", distance / 1000.0)
         } else if (distance == 0L) {
-            return "在你附近"
+            return "Ta隐藏了位置"
         } else {
             return "${distance}m"
         }
@@ -95,7 +95,7 @@ object FlippedHelper {
                 return "对方已读"
             }
             else -> {
-                return "对方不在平台"
+                return "Ta在开小差"
             }
         }
     }

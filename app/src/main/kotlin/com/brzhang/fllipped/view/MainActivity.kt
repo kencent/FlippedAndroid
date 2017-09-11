@@ -226,7 +226,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         transAction.show(mCallFragment)
         transAction.hide(mMineFragment)
         transAction.commitAllowingStateLoss()
-        title = "视频聊"
+        title = "配聊"
     }
 
     private fun showSqureFragment() {
