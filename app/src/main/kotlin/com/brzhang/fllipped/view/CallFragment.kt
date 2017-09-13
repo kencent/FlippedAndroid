@@ -48,9 +48,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         callTv?.setOnClickListener {
             if (mCallState != CallState.Calling) {
                 if (isLoginSdk) {
-                    mCallState = CallState.Calling
-                    switchCallBtn()
-                    callSomeOne()
+                    prepareCall()
                 } else {
                     loginSdkAndpreCall()
 //                    toast("sdk 故障，请稍后再试~~")
@@ -62,8 +60,14 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         ILVCallManager.getInstance().init(ILVCallConfig()
                 .setNotificationListener(this)
                 .setAutoBusy(true))
-        loginSdkAndpreCall()
+//        loginSdkAndpreCall()
         return view
+    }
+
+    private fun prepareCall() {
+        mCallState = CallState.Calling
+        switchCallBtn()
+        callSomeOne()
     }
 
     override fun onDestroyView() {
@@ -135,6 +139,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         ILiveLoginManager.getInstance().iLiveLogin(id, userSig, object : ILiveCallBack<Int> {
             override fun onSuccess(data: Int?) {
                 isLoginSdk = true
+                prepareCall()
             }
 
             override fun onError(module: String?, errCode: Int, errMsg: String?) {
@@ -143,7 +148,10 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         })
     }
 
-    public fun cancelCall() {
+    fun cancelCall() {
+        if (!isLoginSdk) {
+            return
+        }
         mCallState = CallState.Init
         switchCallBtn()
         mHandler.removeCallbacks(mCallRunable)
@@ -187,7 +195,7 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
                     override fun onNext(callResponse: CallResponse) {
                         if (callResponse.wait_timeout != null && callResponse.wait_timeout!! > 0L) {
                             dtoast("当前没有可以匹配的人，等待【" + callResponse.wait_timeout + "】s")
-                            sendRepeatCallMessage(callResponse.wait_timeout!!)
+                            sendRepeatCallMessage(callResponse.wait_timeout!! * 1000)
                         } else if (callResponse.uid != null) {
                             dtoast("后台给出一个可以匹配的人，uid是" + callResponse.uid)
                             mCallState = CallState.CallSucc

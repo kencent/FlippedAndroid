@@ -56,21 +56,22 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     private static final int REQUEST_PHONE_PERMISSIONS = 0;
     private Button btnEndCall, btnCamera, btnMic, btnSpeaker;
     private AVRootView avRootView;
-    private TextView tvTitle, tvLog;
+    private TextView   tvTitle, tvLog;
     private RelativeLayout rlControl;
-    private LinearLayout llBeauty;
-    private SeekBar sbBeauty;
+    private LinearLayout   llBeauty;
+    private SeekBar        sbBeauty;
 
     private String mHostId;
-    private int mCallId;
-    private int mCallType;
-    private int mBeautyRate;
+    private int    mCallId;
+    private int    mCallType;
+    private int    mBeautyRate;
 
     private boolean bCameraEnable = true;
-    private boolean bMicEnalbe = true;
-    private boolean bSpeaker = true;
-    private int mCurCameraId = ILiveConstants.FRONT_CAMERA;
+    private boolean bMicEnalbe    = true;
+    private boolean bSpeaker      = true;
+    private int     mCurCameraId  = ILiveConstants.FRONT_CAMERA;
     private ArrayList<String> nums;
+    private boolean mDestroy = false;
 
     private void initView() {
         avRootView = (AVRootView) findViewById(R.id.av_root_view);
@@ -250,6 +251,7 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
     protected void onDestroy() {
         ILVCallManager.getInstance().removeCallListener(this);
         ILVCallManager.getInstance().onDestory();
+        mDestroy = true;
         super.onDestroy();
     }
 
@@ -263,6 +265,12 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
         // library中不能使用switch索引资源id
         if (v.getId() == R.id.btn_end) {
             ILVCallManager.getInstance().endCall(mCallId);
+            {
+                //如果主动点击取消
+                cancelCall();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
         } else if (v.getId() == R.id.btn_camera) {
             changeCamera();
         } else if (v.getId() == R.id.btn_mic) {
@@ -346,14 +354,18 @@ public class CallActivity extends Activity implements ILVCallListener, ILVBCallM
                         if (BuildConfig.DEBUG) {
                             Toast.makeText(CallActivity.this, "辍币后台出故障了，你还可能被别call到", Toast.LENGTH_LONG).show();
                         }
-                        setResult(Activity.RESULT_OK);
-                        finish();
+                        if (!mDestroy) {
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                        }
                     }
 
                     @Override
                     public void onNext(ResponseBody responseBody) {
-                        setResult(Activity.RESULT_OK);
-                        finish();
+                        if (!mDestroy) {
+                            setResult(Activity.RESULT_OK);
+                            finish();
+                        }
                     }
                 });
     }

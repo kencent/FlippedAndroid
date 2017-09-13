@@ -9,8 +9,8 @@ android {
         applicationId "com.brzhang.fllipped"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 200001
-        versionName "2.0.1"
+        versionCode 200003
+        versionName "2.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
