@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.brzhang.fllipped.App
 import com.brzhang.fllipped.Config
+import com.brzhang.fllipped.NotificationService
 import com.brzhang.fllipped.R
 import com.brzhang.fllipped.pref.UserPref
 import com.tencent.callsdk.ILVCallConfig
@@ -27,7 +28,6 @@ import java.util.ArrayList
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     val TAG = "MainActivity"
-
     val mSqureFragment = SqureFragment.newInstance()
     val mMineFragment = MineFragment.newInstance()
     var mCallFragment = CallFragment.newInstance()
@@ -60,6 +60,25 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         navigationView.setNavigationItemSelectedListener(this)
         IntroductionActivity.lanuchMe(this)
         ILiveSDK.getInstance().initSdk(App.ApplicationContext(), Config.HU_DOND_VIDEO_APP_ID, Config.VIDEO_APP_ACCOUNT_TYPE)
+        weatherGogoRandomCallFragment()
+    }
+
+    private fun weatherGogoRandomCallFragment() {
+        val index = intent.getIntExtra(KEY_FRAGMENT_INDEX, 0);
+        if (index == 1) {
+            bottomBar.selectTabAtPosition(1, true)
+            mCallFragment.makeCallTvClick()
+        }
+    }
+
+    private var mSdkLogined: Boolean = false
+
+    private fun startNotficationService() {
+        val startIntent = Intent(this, NotificationService::class.java)
+        var componeName = startService(startIntent)
+        if (componeName != null) {
+            mSdkLogined = true
+        }
     }
 
     override fun onResume() {
@@ -158,6 +177,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         /**
          * 登录检测还是放在后台校验
          */
+        if (UserPref.isUserLogin(this, false) && !mSdkLogined) {
+            //通知用户，有新的消息到来
+            startNotficationService()
+        }
     }
 
     private fun setupView() {
@@ -267,4 +290,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
     }
+
+    companion object {
+        val KEY_FRAGMENT_INDEX: String = "key_fragment_index"
+    }
+
 }
+
+
