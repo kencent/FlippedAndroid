@@ -18,19 +18,19 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size_xxl" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/flipped_post_activity_et_phone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/flipped_layout_content_border"
         android:hint="@string/prompt_post_activity_phone"
-        android:inputType="phone"
         android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/text_color_h2"
         android:textColorHint="@color/textColorTertiary"
         android:textCursorDrawable="@null"
+        android:completionThreshold="1"
         android:textSize="@dimen/text_size_l" />
 
     <EditText
@@ -74,8 +74,8 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:textSize="@dimen/text_size_l"
-            android:text="添加图片" />
+            android:text="添加图片"
+            android:textSize="@dimen/text_size_l" />
 
         <ImageView
             android:id="@+id/activity_post_add_image_iv_content"

@@ -1,9 +1,11 @@
 package com.brzhang.fllipped;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.brzhang.fllipped.api.FllippedService;
 import com.brzhang.fllipped.api.RetrofitClient;
@@ -20,6 +22,7 @@ import com.tencent.TIMUser;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

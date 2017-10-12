@@ -8,13 +8,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import com.brzhang.fllipped.HttpUtils
-import com.brzhang.fllipped.R
+import com.brzhang.fllipped.*
 import com.brzhang.fllipped.model.Content
 import com.brzhang.fllipped.model.Flippedword
 import com.brzhang.fllipped.model.SignResponse
@@ -26,9 +23,11 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import kotlinx.android.synthetic.main.activity_post.*
+import rx.Observable
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.util.*
 
 
 /**
@@ -41,7 +40,7 @@ class PostActivity : FlippedBaseActivity() {
     val REQUEST_CODE_CHOOSE = 1002
 
     var mSelected = ArrayList<Uri>()
-    private var mPhone: EditText? = null
+    private var mPhone: AutoCompleteTextView? = null
 
     private var mText: EditText? = null
 
@@ -60,6 +59,36 @@ class PostActivity : FlippedBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         needLocation = true
         super.onCreate(savedInstanceState)
+        getContracts()
+    }
+
+    private fun getContracts() {
+        Observable.create(Observable.OnSubscribe<List<ContractModel>> { subscriber ->
+            subscriber.onNext(ContractUtils.getContracts(this))
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<List<ContractModel>>() {
+                    override fun onCompleted() {
+
+                    }
+
+                    override fun onError(e: Throwable) {
+                        toast(e.message ?: "")
+                    }
+
+                    override fun onNext(contractModels: List<ContractModel>) {
+                        val list = contractModels.map { it.toString() }
+                        setupAutoCompleteText(list)
+                    }
+                })
+    }
+
+    private fun setupAutoCompleteText(list: List<String>) {
+        dToast("拉取联系人成功，变设置")
+        mPhone?.setOnDismissListener {
+            mPhone?.setText(MobileUtils.getMobiles(mPhone?.text.toString()))
+        }
+        mPhone?.setAdapter(ArrayAdapter<String>(this, R.layout.post_activity_auto_comp_item, list))
     }
 
     override fun onResume() {
@@ -209,8 +238,8 @@ class PostActivity : FlippedBaseActivity() {
 
     private fun postFlipped() {
 
-        if (mPhone?.text.toString().isBlank()) {
-            toast("还没有填发送给谁")
+        if (mPhone?.text.toString().isBlank() || MobileUtils.getMobiles(mPhone?.text.toString()).isBlank()) {
+            toast("请填入一个正确的手机号")
             return
         }
 
