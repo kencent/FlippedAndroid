@@ -12,16 +12,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import com.brzhang.fllipped.App
-import com.brzhang.fllipped.Config
-import com.brzhang.fllipped.NotificationService
-import com.brzhang.fllipped.R
+import com.brzhang.fllipped.*
 import com.brzhang.fllipped.pref.UserPref
-import com.tencent.callsdk.ILVCallConfig
-import com.tencent.callsdk.ILVCallManager
 import com.tencent.ilivesdk.ILiveSDK
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.ArrayList
@@ -61,6 +55,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         IntroductionActivity.lanuchMe(this)
         ILiveSDK.getInstance().initSdk(App.ApplicationContext(), Config.HU_DOND_VIDEO_APP_ID, Config.VIDEO_APP_ACCOUNT_TYPE)
         weatherGogoRandomCallFragment()
+        showOpenNotificationTips()
+
+    }
+
+    private fun showOpenNotificationTips() {
+        if (Build.MANUFACTURER.equals("vivo") || Build.MANUFACTURER.equals("OPPO")) {
+            if (!NotificationUtils.isNotificationEnabled(this)) {
+                //未获得通知权限，此时把用户引向系统的设置界面，使用户手动打开通知权限
+                //代码不上了，总之在这里谈提示框让用户打开设置界面就好了～
+                MaterialDialog.Builder(this)
+                        .theme(Theme.DARK)
+                        .title("开启通知可以有更大机会匹配到随机聊的人")
+                        .positiveText("去开启")
+                        .neutralText("取消")
+                        .onPositive { dialog, which ->
+                            // TODO
+                            NotificationUtils.toSettingPage(this)
+                        }
+                        .onNeutral { dialog, which ->
+                        }
+                        .onNegative { dialog, which ->
+                        }
+                        .onAny { dialog, which ->
+                        }
+                        .show()
+
+            }
+        }
     }
 
     private fun weatherGogoRandomCallFragment() {
@@ -71,13 +93,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    private var mSdkLogined: Boolean = false
 
-    private fun startNotficationService() {
+    private fun startNotificationService() {
         val startIntent = Intent(this, NotificationService::class.java)
-        var componeName = startService(startIntent)
-        if (componeName != null) {
-            mSdkLogined = true
+        var componentName = startService(startIntent)
+        if (componentName != null) {
         }
     }
 
@@ -177,9 +197,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         /**
          * 登录检测还是放在后台校验
          */
-        if (UserPref.isUserLogin(this, false) && !mSdkLogined) {
+        if (UserPref.isUserLogin(this, false) && !NotificationService.sMsdkLogined) {
             //通知用户，有新的消息到来
-            startNotficationService()
+            startNotificationService()
         }
     }
 

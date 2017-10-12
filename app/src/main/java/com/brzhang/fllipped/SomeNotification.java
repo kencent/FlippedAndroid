@@ -53,7 +53,7 @@ public class SomeNotification {
 
 
         final String ticker = exampleString;
-        final String title = "有人刚刚使用了视频聊";
+        final String title = exampleString;
         final String text = exampleString;
 
         Intent pending = new Intent(context, MainActivity.class);
@@ -68,7 +68,7 @@ public class SomeNotification {
                 // notification title, and text.
                 .setSmallIcon(R.drawable.ic_stat_some)
                 .setContentTitle(title)
-                .setContentText(text)
+                //.setContentText(text)
 
                 // All fields below this line are optional.
 

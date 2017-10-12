@@ -2,7 +2,6 @@ package com.brzhang.fllipped;
 
 import android.app.Service;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -10,8 +9,6 @@ import com.brzhang.fllipped.api.FllippedService;
 import com.brzhang.fllipped.api.RetrofitClient;
 import com.brzhang.fllipped.model.SignResponse;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElemType;
@@ -28,6 +25,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class NotificationService extends Service {
+
+    public static boolean sMsdkLogined = false;
     private static final String TAG = "NotificationService";
 
     public NotificationService() {
@@ -89,6 +88,7 @@ public class NotificationService extends Service {
                     public void onSuccess() {//登录成功
                         Log.e(TAG, "onSuccess() called with: " + "");
                         addMessageListener();
+                        sMsdkLogined = true;
                     }
 
                     @Override
@@ -118,14 +118,13 @@ public class NotificationService extends Service {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(0).getElement(0).getType() == TIMElemType.Custom) {
-                    String data = new String(((TIMCustomElem) list.get(0).getElement(0)).getData(), Charset.defaultCharset());
-                    NotifyModel model = new Gson().fromJson(data, NotifyModel.class);
+                    String content = ((TIMCustomElem) list.get(0).getElement(0)).getDesc();
+                    String ext = new String(((TIMCustomElem) list.get(0).getElement(0)).getData(), Charset.defaultCharset());
+                    NotifyExtModel model = new Gson().fromJson(ext, NotifyExtModel.class);
                     if (model != null) {
-                        if (model.getMsgBody().get(0) != null) {
-                            String content = model.getMsgBody().get(0).getMsgContent().getDesc();
-                            SomeNotification.notify(this, content, 99);
-                        }
+                        // TODO: 2017/10/12 使用后台配置的url进行跳转
                     }
+                    SomeNotification.notify(this, content, 99);
                 }
             }
         }

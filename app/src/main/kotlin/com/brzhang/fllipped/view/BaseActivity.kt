@@ -123,7 +123,7 @@ abstract class BaseActivity : AppCompatActivity(), TencentLocationListener {
             event: Any? ->
             when (event) {
                 is UserAuthFailed -> {
-                    //UserPref.setUserLogin(this, false)
+                    UserPref.setUserLogin(this, false)
                     gotoLoginActivity()
                 }
                 else -> {//交给子类处理其他事件

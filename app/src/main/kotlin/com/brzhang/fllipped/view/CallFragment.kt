@@ -129,11 +129,11 @@ open class CallFragment : BaseFragment(), ILVIncomingListener, ILVCallListener, 
         if (mCallState == CallState.Calling) {
             viewFlipper?.displayedChild = 1
             callTv?.text = "退出"
-            callTips?.text = "退出后，点匹配Ta可以重新开始召唤Ta"
+            callTips?.text = "退出后，点匹配Ta可以重新开始匹配"
         } else {
             viewFlipper?.displayedChild = 0
             callTv?.text = "召唤Ta"
-            callTips?.text = "点击后，可以开始召唤心动的Ta"
+            callTips?.text = getString(R.string.video_tips)
         }
 
     }
